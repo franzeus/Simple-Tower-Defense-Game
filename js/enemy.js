@@ -27,6 +27,5 @@ Enemy.prototype.draw = function() {
 };
 //
 Enemy.prototype.remove = function() {
-	console.log("remove enemy");
 	this.isVisible = false;
 };

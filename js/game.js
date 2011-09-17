@@ -51,7 +51,7 @@ Game.prototype.start = function() {
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
-	this.spawnInterval = setInterval(function() { that.createEnemy() }, 1500);
+	this.spawnInterval = setInterval(function() { that.createEnemy() }, 4000);
 };
 
 // Draw
@@ -104,8 +104,12 @@ Game.prototype.stop = function() {
 Game.prototype.checkCollision = function() {
 	var vip = this.vip;
   this.enemies.forEach(function(enemy) {
-		if(vip.x >= enemy.x && vip.x <= (enemy.x + enemy.size) && vip.y >= enemy.y && vip.y <= enemy.y + enemy.size)
-			enemy.remove();
+  	//console.log(enemy.enemyShape.x ,enemy.enemyShape.radius)
+  	if(enemy.isVisible) {
+			if(enemy.enemyShape.x > vip.x && enemy.enemyShape.x < (vip.x + vip.width) 
+				&& enemy.enemyShape.y > vip.y && enemy.enemyShape.y < (vip.y + vip.height))
+				enemy.remove();
+		}
 	});
 };
 
@@ -143,7 +147,7 @@ Game.prototype.createEnemy = function() {
 		var randomY = this.getRandomNumber(0, this.HEIGHT) + this.HEIGHT;
 	}
 
-	this.enemies.push(new Enemy(this._canvasContext, randomX, randomY, this.vip.x, this.vip.y));
+	this.enemies.push(new Enemy(this._canvasContext, randomX, randomY, this.vip.x + (this.vip.width / 2), this.vip.y  + (this.vip.height / 2)));
 }
 
 // ------------------------------------------------------
