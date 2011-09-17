@@ -41,14 +41,17 @@ Game.prototype.start = function() {
 	$("#createTowerButton").click($.proxy(this.initAddTower, this));
 
 	// Create VIP
-	that.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
-	that.itemMenu = new ItemMenu(this._canvasContext, this.WIDTH, this.HEIGHT);
+	this.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
+	//that.itemMenu = new ItemMenu(this._canvasContext, this.WIDTH, this.HEIGHT);
 	// Create test tower
 	this.towers.push(new Tower(this._canvasContext, 300, 120));
 	this.towers.push(new Tower(this._canvasContext, 100, 420));	
 
+	this.enemyShape = new Circle(this._canvasContext, 30, 30, 10, "#FF0000");
+
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
+	this.spawnInterval = setInterval(function() { that.createEnemy() }, 1500);
 };
 
 // Draw
@@ -56,7 +59,7 @@ Game.prototype.draw = function() {
 	this.clearCanvas();
 
 	// Draw Menu
-	this.itemMenu.draw();
+	//this.itemMenu.draw();
 	
 	// Draw VIP
 	this.vip.draw();
@@ -66,11 +69,24 @@ Game.prototype.draw = function() {
 		tower.draw();
 	});
 
+	// Draw Enemies
+	this.enemies.forEach(function(enemy) {
+		enemy.draw();
+	});
+
+	// Update game
+	this.update();
+
 	if(this.drawNewTower)
 		this.m.draw();
 
 	this.context.drawImage(this.buffer, 0, 0);	
 };
+
+// Update Game
+Game.prototype.update = function() {
+	this.checkCollision();
+}
 
 //
 Game.prototype.clearCanvas = function() {
@@ -84,7 +100,17 @@ Game.prototype.stop = function() {
     this.interval = 0;
 };
 
-// Add new Tower to canvas
+// 
+Game.prototype.checkCollision = function() {
+	var vip = this.vip;
+  this.enemies.forEach(function(enemy) {
+		if(vip.x >= enemy.x && vip.x <= (enemy.x + enemy.size) && vip.y >= enemy.y && vip.y <= enemy.y + enemy.size)
+			enemy.remove();
+	});
+};
+
+
+// on canvas click event
 Game.prototype.clickEvent = function(e) {
 	
 	var x = this.getMousePosition(e)[0];
@@ -97,6 +123,30 @@ Game.prototype.clickEvent = function(e) {
 	});
 }
 
+// ------------------------------------------------------
+// Create Enemy
+Game.prototype.createEnemy = function() {
+	
+	var plusMinus = this.getRandomNumber(0,3);
+
+	if(plusMinus == 0) {
+		var randomX = this.getRandomNumber(0, this.WIDTH) - this.WIDTH;
+		var randomY = this.getRandomNumber(0, this.HEIGHT) - this.HEIGHT;
+	} else if(plusMinus == 1) {
+		var randomX = this.getRandomNumber(0, this.WIDTH) + this.WIDTH;
+		var randomY = this.getRandomNumber(0, this.HEIGHT) - this.HEIGHT;
+	} else if(plusMinus == 2) {
+		var randomX = this.getRandomNumber(0, this.WIDTH) - this.WIDTH;
+		var randomY = this.getRandomNumber(0, this.HEIGHT) + this.HEIGHT;
+	} else {
+		var randomX = this.getRandomNumber(0, this.WIDTH) + this.WIDTH;
+		var randomY = this.getRandomNumber(0, this.HEIGHT) + this.HEIGHT;
+	}
+
+	this.enemies.push(new Enemy(this._canvasContext, randomX, randomY, this.vip.x, this.vip.y));
+}
+
+// ------------------------------------------------------
 // Create Tower
 Game.prototype.initAddTower = function(e) {
 	this.drawNewTower = true;
@@ -106,12 +156,12 @@ Game.prototype.initAddTower = function(e) {
 };
 Game.prototype.bindTowerToMouse = function(e) {	
 	if(this.drawNewTower) {		
-		this.m.x = e.pageX;
-		this.m.y = e.pageY;		
+		this.m.x = e.pageX - 40;
+		this.m.y = e.pageY - 40;		
 	}
 }
 Game.prototype.createTower = function(e) {
-	this.towers.push(new Tower(this._canvasContext, e.pageX, e.pageY));
+	this.towers.push(new Tower(this._canvasContext, e.pageX - 40, e.pageY - 40));
 	e.stopPropagation();
 	this.drawNewTower = false;
 	$("#canvas").unbind("mousemove", this.createTower);

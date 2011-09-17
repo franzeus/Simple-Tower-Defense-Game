@@ -1,27 +1,32 @@
-Enemy = function(_id, _posX, _posY) { 
+Enemy = function(_context, _posX, _posY, _endPosX, _endPosY) { 
 
-	this.id = _id;
-	this.posX = _posX;
-	this.posY = _posY;
+	this.canvasContext = _context;
+	this.startX = _posX;
+	this.startY = _posY;
+	this.endX = _endPosX;
+	this.endY = _endPosY;
 	
 	this.speed = 1;
-	this.color = "#FF8800";
+	this.color = "#FF0000";
 	this.lives = 1;
+	this.isVisible = true;
 
-	this.interval;
+	this.enemyShape = new Circle(_context, this.startX, this.startY, 10, this.color);
 
-	this.init();
+	// Calculate inclination
+	this.xChange = (this.endX - this.enemyShape.x) / 1000;
+	this.yChange = (this.endY - this.enemyShape.y) / 1000;
 };
-
-Enemy.prototype.init = function() {
-	this.interval = setInterval(this.move, this.speed * 1000);
-};
-
-// Shoot bullet
+//
 Enemy.prototype.draw = function() {
-	
+	if(this.isVisible) {
+		this.enemyShape.x += this.xChange;
+		this.enemyShape.y += this.yChange;
+		this.enemyShape.draw();
+	}
 };
-
-// Remove Tower
-Enemy.prototype.remove = function() {		
+//
+Enemy.prototype.remove = function() {
+	console.log("remove enemy");
+	this.isVisible = false;
 };
