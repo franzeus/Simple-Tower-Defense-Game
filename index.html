@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>TowerDefense</title>
+
+<style>
+		body { color:#FFFFFF; background:#666666; font-family: Arial;}
+		canvas { background:#FFFFFF; padding:2em; }
+
+</style>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="/nowjs/now.js"></script>
+
+<script src="js/vip.js"></script>
+<script src="js/tower.js"></script>
+<script src="js/enemy.js"></script>
+<script src="js/bullet.js"></script>
+<script src="js/game.js"></script>
+
+<script>
+$(document).ready(function() {
+	var game = new Game();
+});
+</script>
+</head>
+<body>
+
+<canvas id="canvas" width="800" height="480">Your browser doesnt know html5 canvas</canvas>
+<canvas id="buffer-canvas" width="800" height="480" style="display:none;">Your browser doesnt know html5 canvas</canvas>
+
+
+
+</body>
+</html>
