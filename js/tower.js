@@ -12,7 +12,7 @@ Tower = function(_context, _posX, _posY) {
 	this.shootsPerSeconds = 15;
 	this.costs = 100;
 	this.color = "#7F3300";
-	this.lives = 1;	
+	this.lives = 2;	
 
 	// Range
 	this.isDisplayRange = false;
@@ -36,7 +36,8 @@ Tower.prototype.draw = function() {
 	if(this.isDisplayRange)
 		this.showRange();
 
-	this.towerShape.draw();
+	if(this.lives > 0)
+		this.towerShape.draw();
 };
 // Shoot bullet
 Tower.prototype.shoot = function() {
@@ -50,6 +51,11 @@ Tower.prototype.clickEvent = function() {
 // Display range circle
 Tower.prototype.showRange = function() {
 	this.rangeShape.draw();
+};
+
+//
+Tower.prototype.setDamage = function() {
+	this.lives--;
 };
 
 // Remove Tower

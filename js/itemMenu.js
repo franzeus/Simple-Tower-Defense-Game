@@ -26,7 +26,4 @@ ItemMenu.prototype.draw = function() {
 
 ItemMenu.prototype.clickEvent = function() {
 
-
-
-
 };

@@ -57,9 +57,6 @@ Game.prototype.start = function() {
 // Draw
 Game.prototype.draw = function() {
 	this.clearCanvas();
-
-	// Draw Menu
-	//this.itemMenu.draw();
 	
 	// Draw VIP
 	this.vip.draw();
@@ -86,6 +83,8 @@ Game.prototype.draw = function() {
 // Update Game
 Game.prototype.update = function() {
 	this.checkCollision();
+	if(this.vip.lives <= 0)
+		this.stop();
 }
 
 //
@@ -94,21 +93,37 @@ Game.prototype.clearCanvas = function() {
 	this._canvasContext.clearRect(0, 0, this.WIDTH, this.HEIGHT);
 };
 
-//
+// Stop Game
 Game.prototype.stop = function() {
     clearInterval(this.interval);    
     this.interval = 0;
 };
 
-// 
+//
 Game.prototype.checkCollision = function() {
 	var vip = this.vip;
+	var towers = this.towers;
+  
+  // Enemy collision detection
   this.enemies.forEach(function(enemy) {
-  	//console.log(enemy.enemyShape.x ,enemy.enemyShape.radius)
   	if(enemy.isVisible) {
+  		
+  		// Collision with base
 			if(enemy.enemyShape.x > vip.x && enemy.enemyShape.x < (vip.x + vip.width) 
-				&& enemy.enemyShape.y > vip.y && enemy.enemyShape.y < (vip.y + vip.height))
-				enemy.remove();
+				&& enemy.enemyShape.y > vip.y && enemy.enemyShape.y < (vip.y + vip.height)) {
+				enemy.remove(); // TODO: remove from enemies-array
+				vip.setDamage();
+			}
+
+			// Collision with tower
+			towers.forEach(function(tower) {
+				if(enemy.enemyShape.x > tower.x && enemy.enemyShape.x < (tower.x + tower.radius) 
+				&& enemy.enemyShape.y > vip.y && enemy.enemyShape.y < ( tower.y +  tower.radius)) {
+					enemy.remove(); // TODO: remove from enemies-array
+				 	tower.setDamage();
+				}
+			});
+
 		}
 	});
 };
