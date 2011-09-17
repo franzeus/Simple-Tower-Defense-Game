@@ -1,15 +1,13 @@
 Vip = function(_context, _canvasW, _canvasH) {
 
 	var that = this;
-	this.x;
-	this.y;	
 
 	this.canvasContext = _context;
 
 	this.height = 40;
 	this.width = 40;
-	this.posX = (_canvasW / 2) - (this.width / 2);
-	this.posY = (_canvasH / 2) - (this.height / 2);
+	this.x = (_canvasW / 2) - (this.width / 2);
+	this.y = (_canvasH / 2) - (this.height / 2);
 		
 	this.color = "#FF00FF";
 	this.lives = 1;
@@ -21,11 +19,9 @@ Vip = function(_context, _canvasW, _canvasH) {
 
 Vip.prototype.init = function() {	
 
-	
 };
 
 Vip.prototype.draw = function() {	
-	console.log("draw VIP");
-	//this.canvasContext.fillStyle = this.color; //'rgba(50, 50, 80, 1)';
-	//this.canvasContext.fillRect(that.x, that.y, that.width, that.height);
+	this.canvasContext.fillStyle = this.color;
+	this.canvasContext.fillRect(this.x, this.y, this.width, this.height);
 };

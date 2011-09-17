@@ -1,5 +1,5 @@
 var Game = function() { 
-	var that = this;
+	
 	this.canvas;
 	this.buffer;
 	this.context;
@@ -13,11 +13,12 @@ var Game = function() {
 	this.tower = [];
 	this.enemy = [];
 	
-	this.start();	
+	this.start();
 };
 
 // Init canvas and the game
 Game.prototype.start = function() {
+	var that = this;
 
 	this.canvas = document.getElementById("canvas");
 	this.buffer = document.getElementById("buffer-canvas");
@@ -29,10 +30,13 @@ Game.prototype.start = function() {
 	this._canvasContext = this.buffer.getContext("2d");
 
 	this.HEIGHT = this.canvas.height;
-	this.WIDTH = this.canvas.width;		
+	this.WIDTH = this.canvas.width;
 
 	// Create VIP
 	that.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
+
+	//this.context.fillStyle = 'rgba(50, 50, 80, 1)';
+	//this.context.fillRect(100, 200, 50, 50);
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
@@ -41,7 +45,9 @@ Game.prototype.start = function() {
 // Draw
 Game.prototype.draw = function() {
 	this.clear();
-	//this.vip.draw();
+	this.vip.draw();
+
+	this.context.drawImage(this.buffer, 0, 0);
 };
 
 
