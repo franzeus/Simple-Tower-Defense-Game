@@ -9,7 +9,7 @@ Vip = function(_context, _canvasW, _canvasH) {
 	this.x = (_canvasW / 2) - (this.width / 2);
 	this.y = (_canvasH / 2) - (this.height / 2);
 		
-	this.color = "#FF00FF";
+	this.color = "#FFD800";
 	this.lives = 1;
 
 	this.interval;

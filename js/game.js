@@ -10,8 +10,8 @@ var Game = function() {
 	this.interval = 0;
 
 	this.vip = null;
-	this.tower = [];
-	this.enemy = [];
+	this.towers = [];
+	this.enemies = [];
 	
 	this.start();
 };
@@ -32,11 +32,14 @@ Game.prototype.start = function() {
 	this.HEIGHT = this.canvas.height;
 	this.WIDTH = this.canvas.width;
 
+	// Events
+	$("#canvas").mousedown($.proxy(this.createTower, this));
+
 	// Create VIP
 	that.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
 
-	//this.context.fillStyle = 'rgba(50, 50, 80, 1)';
-	//this.context.fillRect(100, 200, 50, 50);
+	// Create test tower
+	this.towers.push(new Tower(this._canvasContext, 300, 120));
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
@@ -44,14 +47,53 @@ Game.prototype.start = function() {
 
 // Draw
 Game.prototype.draw = function() {
-	this.clear();
+	this.clearCanvas();
+
+	// Draw VIP
 	this.vip.draw();
+
+	// Draw Towers
+	this.towers.forEach(function(tower) {
+		tower.draw();
+	});
 
 	this.context.drawImage(this.buffer, 0, 0);
 };
 
+//
+Game.prototype.clearCanvas = function() {
+	this._canvasContext.clearRect(0, 0, this.WIDTH, this.HEIGHT);
+};
+
+//
+Game.prototype.stop = function() {
+    clearInterval(this.interval);    
+    this.interval = 0; 
+};
+
+// Add new Tower to canvas
+Game.prototype.createTower = function(e) {
+	var x, y;
+	
+	if (e.pageX || e.pageY) { 
+  	x = e.pageX; y = e.pageY;
+	}	else { 
+  	x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+  	y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+	}	 
+	
+	// Check onClick Towers
+	this.towers.forEach(function(tower) {
+		//console.log(tower, tower.x, tower.y, tower.size);
+		if(x >= tower.x && x <= (tower.x + tower.size) && y >= tower.y && y <= tower.y + tower.size)
+			tower.clickEvent();
+	});
+}
+
 
 // ------------------------------------------------------
+// HELPERS
+
 // Return a random number between min and max
 Game.prototype.getRandomNumber = function( min, max ) {
 	if( min > max )
@@ -60,13 +102,4 @@ Game.prototype.getRandomNumber = function( min, max ) {
 		return( min );
 
 	return( min + parseInt( Math.random() * ( max-min+1 ) ) );
-};
-
-Game.prototype.clear = function() {
-	this._canvasContext.clearRect(0, 0, this.WIDTH, this.HEIGHT);
-};
-
-Game.prototype.stop = function() {
-    clearInterval(this.interval);    
-    this.interval = 0; 
 };
