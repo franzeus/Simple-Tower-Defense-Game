@@ -13,6 +13,9 @@ var Game = function() {
 	this.towers = [];
 	this.enemies = [];
 	this.itemMenu = null;
+
+	this.drawNewTower = false;
+	this.m = null;
 	
 	this.start();
 };
@@ -35,14 +38,14 @@ Game.prototype.start = function() {
 
 	// Events
 	$("#canvas").mousedown($.proxy(this.clickEvent, this));
-	$("#createTowerButton").click($.proxy(this.addTower, this));
+	$("#createTowerButton").click($.proxy(this.initAddTower, this));
 
 	// Create VIP
 	that.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
 	that.itemMenu = new ItemMenu(this._canvasContext, this.WIDTH, this.HEIGHT);
 	// Create test tower
 	this.towers.push(new Tower(this._canvasContext, 300, 120));
-	this.towers.push(new Tower(this._canvasContext, 100, 420));
+	this.towers.push(new Tower(this._canvasContext, 100, 420));	
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
@@ -63,8 +66,10 @@ Game.prototype.draw = function() {
 		tower.draw();
 	});
 
-	this.context.drawImage(this.buffer, 0, 0);
-	
+	if(this.drawNewTower)
+		this.m.draw();
+
+	this.context.drawImage(this.buffer, 0, 0);	
 };
 
 //
@@ -76,7 +81,7 @@ Game.prototype.clearCanvas = function() {
 //
 Game.prototype.stop = function() {
     clearInterval(this.interval);    
-    this.interval = 0; 
+    this.interval = 0;
 };
 
 // Add new Tower to canvas
@@ -90,17 +95,30 @@ Game.prototype.clickEvent = function(e) {
 		if(x >= tower.x && x <= (tower.x + tower.size) && y >= tower.y && y <= tower.y + tower.size)
 			tower.clickEvent();
 	});
-
-
 }
 
 // Create Tower
-Game.prototype.addTower = function(e) {
-	var x = this.getMousePosition(e)[0];
-	var y = this.getMousePosition(e)[1];
-
-
+Game.prototype.initAddTower = function(e) {
+	this.drawNewTower = true;
+	this.m = new Circle(this._canvasContext, e.pageX, e.pageY, 20, "#7F3300");
+	$("#canvas").mousemove($.proxy(this.bindTowerToMouse, this));	
+	$("#canvas").click($.proxy(this.createTower, this));
+};
+Game.prototype.bindTowerToMouse = function(e) {	
+	if(this.drawNewTower) {		
+		this.m.x = e.pageX;
+		this.m.y = e.pageY;		
+	}
 }
+Game.prototype.createTower = function(e) {
+	this.towers.push(new Tower(this._canvasContext, e.pageX, e.pageY));
+	e.stopPropagation();
+	this.drawNewTower = false;
+	$("#canvas").unbind("mousemove", this.createTower);
+	$("#canvas").unbind("click", this.createTower);
+};
+
+
 
 // ------------------------------------------------------
 // HELPERS
