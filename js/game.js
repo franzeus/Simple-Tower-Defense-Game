@@ -5,13 +5,14 @@ var Game = function() {
 	this.context;
 	this.HEIGHT;
 	this.WIDTH;
-	this._canvasContext;
+	this._canvasContext = null;
 	this.FPS;
 	this.interval = 0;
 
 	this.vip = null;
 	this.towers = [];
 	this.enemies = [];
+	this.itemMenu = null;
 	
 	this.start();
 };
@@ -33,13 +34,15 @@ Game.prototype.start = function() {
 	this.WIDTH = this.canvas.width;
 
 	// Events
-	$("#canvas").mousedown($.proxy(this.createTower, this));
+	$("#canvas").mousedown($.proxy(this.clickEvent, this));
+	$("#createTowerButton").click($.proxy(this.addTower, this));
 
 	// Create VIP
 	that.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
-
+	that.itemMenu = new ItemMenu(this._canvasContext, this.WIDTH, this.HEIGHT);
 	// Create test tower
 	this.towers.push(new Tower(this._canvasContext, 300, 120));
+	this.towers.push(new Tower(this._canvasContext, 100, 420));
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
@@ -49,6 +52,9 @@ Game.prototype.start = function() {
 Game.prototype.draw = function() {
 	this.clearCanvas();
 
+	// Draw Menu
+	this.itemMenu.draw();
+	
 	// Draw VIP
 	this.vip.draw();
 
@@ -58,10 +64,12 @@ Game.prototype.draw = function() {
 	});
 
 	this.context.drawImage(this.buffer, 0, 0);
+	
 };
 
 //
 Game.prototype.clearCanvas = function() {
+	this.canvas.width = this.WIDTH; // Dont like this solution
 	this._canvasContext.clearRect(0, 0, this.WIDTH, this.HEIGHT);
 };
 
@@ -72,24 +80,27 @@ Game.prototype.stop = function() {
 };
 
 // Add new Tower to canvas
-Game.prototype.createTower = function(e) {
-	var x, y;
+Game.prototype.clickEvent = function(e) {
 	
-	if (e.pageX || e.pageY) { 
-  	x = e.pageX; y = e.pageY;
-	}	else { 
-  	x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
-  	y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
-	}	 
+	var x = this.getMousePosition(e)[0];
+	var y = this.getMousePosition(e)[1];
 	
 	// Check onClick Towers
 	this.towers.forEach(function(tower) {
-		//console.log(tower, tower.x, tower.y, tower.size);
 		if(x >= tower.x && x <= (tower.x + tower.size) && y >= tower.y && y <= tower.y + tower.size)
 			tower.clickEvent();
 	});
+
+
 }
 
+// Create Tower
+Game.prototype.addTower = function(e) {
+	var x = this.getMousePosition(e)[0];
+	var y = this.getMousePosition(e)[1];
+
+
+}
 
 // ------------------------------------------------------
 // HELPERS
@@ -102,4 +113,18 @@ Game.prototype.getRandomNumber = function( min, max ) {
 		return( min );
 
 	return( min + parseInt( Math.random() * ( max-min+1 ) ) );
+};
+
+// Returns current mouseposition
+Game.prototype.getMousePosition = function(e) {
+	var x, y;
+	
+	if (e.pageX || e.pageY) {
+  	x = e.pageX; y = e.pageY;
+	}	else { 
+  	x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+  	y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+	}
+
+	return [x,y];
 };

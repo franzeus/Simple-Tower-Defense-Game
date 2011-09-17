@@ -12,8 +12,9 @@ Vip = function(_context, _canvasW, _canvasH) {
 	this.color = "#FFD800";
 	this.lives = 1;
 
-	this.interval;
+	this.vipShape = new Rectangle(_context, this.x, this.y, this.width, this.height, this.color  );
 
+	this.interval;
 	this.init();
 };
 
@@ -22,6 +23,5 @@ Vip.prototype.init = function() {
 };
 
 Vip.prototype.draw = function() {	
-	this.canvasContext.fillStyle = this.color;
-	this.canvasContext.fillRect(this.x, this.y, this.width, this.height);
+	this.vipShape.draw();
 };

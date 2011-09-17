@@ -12,14 +12,17 @@ Tower = function(_context, _posX, _posY) {
 	this.shootsPerSeconds = 15;
 	this.costs = 100;
 	this.color = "#7F3300";
-	this.lives = 1;
+	this.lives = 1;	
 
 	// Range
-	this.showRange = false;
-	this.rangeColor = 'rgba(255, 214, 229, 0.1)';
+	this.isDisplayRange = false;
+	this.rangeColor = 'rgba(255, 214, 229, 0.4)';
+
+	// Shape of sprites
+	this.towerShape = new Circle( _context ,this.x, this.y, this.radius, this.color );
+	this.rangeShape = new Circle( _context ,this.x, this.y, this.range, this.rangeColor );
 
 	this.interval;
-
 	this.init();
 };
 
@@ -30,20 +33,10 @@ Tower.prototype.init = function() {
 // Draw Tower on canvas
 Tower.prototype.draw = function() {
 
-	this.x += 0.5;
-	this.canvasContext.fillStyle = this.color;
-	this.canvasContext.beginPath();		
-	this.canvasContext.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-	this.canvasContext.fill();
+	if(this.isDisplayRange)
+		this.showRange();
 
-	if(this.showRange) {
-		this.canvasContext.beginPath();
-		this.canvasContext.fillStyle = this.rangeColor;
-		this.canvasContext.arc(this.x, this.y, this.range, 0, Math.PI * 2, true);
-		this.canvasContext.fill();
-	}
-
-
+	this.towerShape.draw();
 };
 // Shoot bullet
 Tower.prototype.shoot = function() {
@@ -51,10 +44,14 @@ Tower.prototype.shoot = function() {
 };
 
 Tower.prototype.clickEvent = function() {
-	this.showRange = !this.showRange;
-	console.log(this.showRange );
+	this.isDisplayRange = !this.isDisplayRange;
+};
+
+// Display range circle
+Tower.prototype.showRange = function() {
+	this.rangeShape.draw();
 };
 
 // Remove Tower
-Tower.prototype.remove = function() {		
+Tower.prototype.remove = function() {
 };
