@@ -18,6 +18,8 @@ Tower = function(_context, _posX, _posY) {
 	this.isDisplayRange = false;
 	this.rangeColor = 'rgba(255, 214, 229, 0.4)';
 
+	this.bullets = [];
+
 	// Shape of sprites
 	this.towerShape = new Circle( _context ,this.x, this.y, this.radius, this.color );
 	this.rangeShape = new Circle( _context ,this.x, this.y, this.range, this.rangeColor );
@@ -32,16 +34,17 @@ Tower.prototype.init = function() {
 
 // Draw Tower on canvas
 Tower.prototype.draw = function() {
-
-	if(this.isDisplayRange)
-		this.showRange();
-
-	if(this.lives > 0)
+	if(this.lives > 0) {
+		if(this.isDisplayRange)
+			this.showRange();	
 		this.towerShape.draw();
+	}
 };
 // Shoot bullet
-Tower.prototype.shoot = function() {
-	//this.bullets = new Bullet(this.x, this.y);
+Tower.prototype.shoot = function(_enemyPosX, _enemyPosY) {
+	var posEndX = _enemyPosX;
+	var posEndY = _enemyPosY;
+	this.bullets.push(new Bullet(this.canvasContext, this.x, this.y, posEndX, posEndY));
 };
 
 Tower.prototype.clickEvent = function() {

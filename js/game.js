@@ -42,12 +42,6 @@ Game.prototype.start = function() {
 
 	// Create VIP
 	this.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
-	//that.itemMenu = new ItemMenu(this._canvasContext, this.WIDTH, this.HEIGHT);
-	// Create test tower
-	this.towers.push(new Tower(this._canvasContext, 300, 120));
-	this.towers.push(new Tower(this._canvasContext, 100, 420));	
-
-	this.enemyShape = new Circle(this._canvasContext, 30, 30, 10, "#FF0000");
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
@@ -64,8 +58,12 @@ Game.prototype.draw = function() {
 	// Draw Towers
 	this.towers.forEach(function(tower) {
 		tower.draw();
+		// Bullets
+		tower.bullets.forEach(function(bullet) {
+			bullet.draw();
+		});
 	});
-
+	
 	// Draw Enemies
 	this.enemies.forEach(function(enemy) {
 		enemy.draw();
@@ -118,12 +116,16 @@ Game.prototype.checkCollision = function() {
 			// Collision with tower
 			towers.forEach(function(tower) {
 				if(enemy.enemyShape.x > tower.x && enemy.enemyShape.x < (tower.x + tower.radius) 
-				&& enemy.enemyShape.y > vip.y && enemy.enemyShape.y < ( tower.y +  tower.radius)) {
+				&& enemy.enemyShape.y > tower.y && enemy.enemyShape.y < ( tower.y +  tower.radius)) {
 					enemy.remove(); // TODO: remove from enemies-array
 				 	tower.setDamage();
 				}
-			});
 
+				if(enemy.enemyShape.x > tower.x && enemy.enemyShape.x < (tower.x + tower.range) 
+				&& enemy.enemyShape.y > tower.y && enemy.enemyShape.y < ( tower.y +  tower.range)) {
+					tower.shoot(enemy.enemyShape.x, enemy.enemyShape.y);
+				}
+			});
 		}
 	});
 };
@@ -161,7 +163,6 @@ Game.prototype.createEnemy = function() {
 		var randomX = this.getRandomNumber(0, this.WIDTH) + this.WIDTH;
 		var randomY = this.getRandomNumber(0, this.HEIGHT) + this.HEIGHT;
 	}
-
 	this.enemies.push(new Enemy(this._canvasContext, randomX, randomY, this.vip.x + (this.vip.width / 2), this.vip.y  + (this.vip.height / 2)));
 }
 

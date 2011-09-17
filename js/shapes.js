@@ -1,5 +1,4 @@
 Circle = function(_context, _x, _y, _r, _color) {	
-
 	this.radius = _r;
 	this.x = _x;
 	this.y = _y;
