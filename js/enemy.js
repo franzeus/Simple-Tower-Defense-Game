@@ -12,11 +12,14 @@ Enemy = function(_context, _posX, _posY, _endPosX, _endPosY) {
 	this.isVisible = true;
 	this.radius = 5;
 
-	this.enemyShape = new Circle(_context, this.startX, this.startY, this.radius, this.color);
-
+	//this.enemyShape = new Circle(_context, this.startX, this.startY, this.radius, this.color);
+	this.enemyShape = new ImageShape(_context, this.startX, this.startY, 15, 22, "images/jet.gif", 0);
 	// Calculate inclination
 	this.xChange = (this.endX - this.enemyShape.x) / 1000;
 	this.yChange = (this.endY - this.enemyShape.y) / 1000;
+
+	//this.enemyShape.angle = parseInt(Math.acos((this.startX * this.endX) + (this.startY * this.endY)));
+	
 };
 //
 Enemy.prototype.draw = function() {

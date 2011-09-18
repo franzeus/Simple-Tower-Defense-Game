@@ -31,16 +31,21 @@ Rectangle.prototype.draw = function() {
 
 // -------------------------------------------------
 
-ImageShape = function(_context, _x, _y, _w, _h, _src) {
+ImageShape = function(_context, _x, _y, _w, _h, _src, _angle) {
 	this.x = _x;
 	this.y = _y;
 	this.width = _w;
 	this.height = _h
 	this.src = _src;
 	this.img = new Image();
+	this.img.src = _src;
 	this.canvasContext = _context;
+	this.angle = 0;// _angle;
 };
 //
 ImageShape.prototype.draw = function() {
+	this.canvasContext.save();
+	this.canvasContext.rotate(this.angle * Math.PI / 180);
 	this.canvasContext.drawImage(this.img, this.x, this.y, this.width, this.height);
+	this.canvasContext.restore();
 };

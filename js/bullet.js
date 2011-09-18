@@ -6,6 +6,7 @@ Bullet = function(_context, _posXstart, _posYstart, _posXend, _posYend) {
 	this.posYend 	= _posYend;
   this.radius = 2;
   this.color = "#00FF00";
+  this.isVisible = true;
 
   this.bulletShape = new Circle(_context, _posXstart, _posYstart, this.radius, this.color);
   this.bulletCollisionShape = new Rectangle(_context, _posXstart - this.radius, _posYstart - this.radius, this.radius, this.radius, this.color);
@@ -14,7 +15,15 @@ Bullet = function(_context, _posXstart, _posYstart, _posXend, _posYend) {
 };
 //
 Bullet.prototype.draw = function() {
-  this.bulletShape.x += this.xChange;
-  this.bulletShape.y += this.yChange;
-  this.bulletShape.draw();	
+  if(this.isVisible) {
+    this.bulletShape.x += this.xChange;
+    this.bulletShape.y += this.yChange;
+    this.bulletCollisionShape.x += this.xChange; 
+    this.bulletCollisionShape.y += this.yChange;
+    this.bulletShape.draw();	    
+  }
+};
+//
+Bullet.prototype.remove = function() {
+  this.isVisible = false;
 };

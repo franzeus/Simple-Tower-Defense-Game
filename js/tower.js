@@ -1,18 +1,17 @@
-Tower = function(_context, _posX, _posY) { 
-
+Tower = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color) { 
 	this.canvasContext = _context;
 
 	this.id = 1;
 	this.x = _posX;
 	this.y = _posY;
 	
-	this.radius = 10;
-	this.size = 30;
-	this.range = 60;
+	this.radius = _radius;
+	this.size = _radius;
+	this.range = _range;
 	this.shootsPerSeconds = 1;
-	this.costs = 100;
-	this.color = "#111111";
-	this.lives = 2;
+	this.costs = _costs;
+	this.color = _color;
+	this.lives = _lives;
 
 	// Range
 	this.isDisplayRange = false;
@@ -48,11 +47,12 @@ Tower.prototype.draw = function() {
 Tower.prototype.shoot = function(_enemyPosX, _enemyPosY) {
 	if(!this.shootInterval){
 		this.bullets.push(new Bullet(this.canvasContext, this.x, this.y, _enemyPosX, _enemyPosY));
-		this.shootInterval = window.setTimeout(this.shoot, this.shootsPerSeconds * 1000);
+		this.shootInterval = window.setTimeout("this.shoot", this.shootsPerSeconds * 1000);
 		window.clearTimeout(this.shootInterval);
 	}
 };
 
+//
 Tower.prototype.clickEvent = function() {
 	this.isDisplayRange = !this.isDisplayRange;
 
@@ -73,3 +73,32 @@ Tower.prototype.setDamage = function() {
 // Remove Tower
 Tower.prototype.remove = function() {
 };
+
+
+// ------- SPECIALIZATION ---------- //
+
+TowerNormal = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color) {
+	this.canvasContext = _context;
+	this.radius = 30;
+	this.x = _posX;
+	this.y = _posY;
+	
+	this.radius = _radius;
+	this.size = _radius;
+	this.range = _range;
+	this.shootsPerSeconds = 1;
+	this.costs = _costs;
+	this.color = '#FF2899';
+	this.lives = _lives;
+}
+TowerNormal.prototype = new Tower();
+TowerNormal.prototype.constructor = Tower;
+
+
+TowerLong = function() {
+
+
+
+}
+TowerLong.prototype = new Tower();
+TowerLong.prototype.constructor = Tower;
