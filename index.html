@@ -4,9 +4,10 @@
 <title>TowerDefense</title>
 
 <style>
-		body { color:#FFFFFF; background:#666666; font-family: Arial;}
-		canvas { background:#FFFFFF; padding:2em; }
-
+		body { color:#FFFFFF; background:#111111; font-family: Arial; font-size:0.8em; margin:0;}
+		canvas { background:#333333 url(images/bg2.jpg); padding:2em; display:block;}
+    input { color:#FFFFFF; background:#000000; border:1px solid #CCCCCC; }
+    #info { margin-top:1em; background:#000000; width:480px; padding:0.5em; overflow:hidden;}
 </style>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
@@ -16,9 +17,14 @@
 </head>
 <body>
 
-<canvas id="canvas" width="800" height="480">Your browser doesnt know html5 canvas</canvas>
-<canvas id="buffer-canvas" width="800" height="480" style="display:none;">Your browser doesnt know html5 canvas</canvas>
-<input type="button" id="createTowerButton"  value="Add Tower"/>
+<canvas id="canvas" width="480" height="340">Your browser doesnt know html5 canvas</canvas>
+<canvas id="buffer-canvas" width="480" height="340" style="display:none;">Your browser doesnt know html5 canvas</canvas>
+<input type="button" id="normal" class="createTowerButton" value="Add normal Tower">
+<input type="button" id="long" class="createTowerButton"  value="Add LongRange Tower">
+
+Base-Health: <input type="text" readonly="readonly" id="baseLive" size="2">
+
+<div id="info"></div>
 
 <script src="js/shapes.js"></script>
 <script src="js/itemMenu.js"></script>

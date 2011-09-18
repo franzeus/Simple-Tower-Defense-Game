@@ -13,8 +13,8 @@ Vip = function(_context, _canvasW, _canvasH) {
 	this.lives = 15;
 
 	this.vipShape = new Rectangle(_context, this.x, this.y, this.width, this.height, this.color  );
-
-	this.interval;
+	
+	$("#baseLive").val(this.lives);
 };
 
 Vip.prototype.draw = function() {	
@@ -23,5 +23,5 @@ Vip.prototype.draw = function() {
 //
 Vip.prototype.setDamage = function() {	
 		this.lives--;
-		console.log(this.lives);
+		$("#baseLive").val(this.lives);
 };

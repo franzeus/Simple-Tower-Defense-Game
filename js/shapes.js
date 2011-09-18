@@ -11,7 +11,7 @@ Circle.prototype.draw = function() {
 	this.canvasContext.fillStyle = this.color;
 	this.canvasContext.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
 	this.canvasContext.fill();
-}
+};
 
 // -------------------------------------------------
 
@@ -27,7 +27,7 @@ Rectangle = function(_context, _x, _y, _w, _h, _color) {
 Rectangle.prototype.draw = function() {
 	this.canvasContext.fillStyle = this.color;
 	this.canvasContext.fillRect(this.x, this.y, this.width, this.height);
-}
+};
 
 // -------------------------------------------------
 
@@ -43,4 +43,4 @@ ImageShape = function(_context, _x, _y, _w, _h, _src) {
 //
 ImageShape.prototype.draw = function() {
 	this.canvasContext.drawImage(this.img, this.x, this.y, this.width, this.height);
-}
+};

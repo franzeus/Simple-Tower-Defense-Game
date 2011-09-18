@@ -38,11 +38,10 @@ Game.prototype.start = function() {
 
 	// Events
 	$("#canvas").mousedown($.proxy(this.clickEvent, this));
-	$("#createTowerButton").click($.proxy(this.initAddTower, this));
+	$(".createTowerButton").click($.proxy(this.initAddTower, this));
 
 	// Create VIP
 	this.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
-	$("#baseLive").val(this.vip.lives);
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
@@ -147,7 +146,10 @@ Game.prototype.clickEvent = function(e) {
 	
 	// Check onClick Towers
 	this.towers.forEach(function(tower) {
-		if(x >= tower.x && x <= (tower.x + tower.size) && y >= tower.y && y <= tower.y + tower.size)
+		if(	x >= tower.collisionShape.x && 
+				x <= (tower.collisionShape.x + tower.collisionShape.width) && 
+				y >= tower.collisionShape.y &&
+				y <= tower.collisionShape.y + tower.collisionShape.height)
 			tower.clickEvent();
 	});
 }
@@ -221,7 +223,6 @@ Game.prototype.getMousePosition = function(e) {
   	x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
   	y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
 	}
-
 	return [x,y];
 };
 
