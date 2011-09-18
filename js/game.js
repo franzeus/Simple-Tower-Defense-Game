@@ -121,9 +121,12 @@ Game.prototype.checkCollision = function() {
 				 	tower.setDamage();
 				}
 
-				if(enemy.enemyShape.x > tower.x && enemy.enemyShape.x < (tower.x + tower.range) 
-				&& enemy.enemyShape.y > tower.y && enemy.enemyShape.y < ( tower.y +  tower.range)) {
-					tower.shoot(enemy.enemyShape.x, enemy.enemyShape.y);
+				// Collision with tower range
+				if( enemy.enemyShape.x > tower.rangeCollisionShape.x 
+					&& enemy.enemyShape.x < (tower.rangeCollisionShape.x + tower.rangeCollisionShape.width)
+					&& enemy.enemyShape.y > tower.rangeCollisionShape.y
+					&& enemy.enemyShape.y < ( tower.rangeCollisionShape.y +  tower.rangeCollisionShape.height) ) {
+						tower.shoot(enemy.enemyShape.x, enemy.enemyShape.y);
 				}
 			});
 		}
