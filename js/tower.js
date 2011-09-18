@@ -6,12 +6,12 @@ Tower = function(_context, _posX, _posY) {
 	this.x = _posX;
 	this.y = _posY;
 	
-	this.radius = 20;
+	this.radius = 10;
 	this.size = 30;
-	this.range = 80;
+	this.range = 60;
 	this.shootsPerSeconds = 1;
 	this.costs = 100;
-	this.color = "#7F3300";
+	this.color = "#111111";
 	this.lives = 2;
 
 	// Range
@@ -58,6 +58,9 @@ Tower.prototype.shoot = function(_enemyPosX, _enemyPosY) {
 
 Tower.prototype.clickEvent = function() {
 	this.isDisplayRange = !this.isDisplayRange;
+
+	var infoText = "Health: " + this.lives + " Range: " + this.range + " ShootsPerSecons: " + this.shootsPerSeconds;
+	$("#info").html(infoText);
 };
 
 // Display range circle

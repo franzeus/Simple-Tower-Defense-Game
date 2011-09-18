@@ -10,8 +10,9 @@ Enemy = function(_context, _posX, _posY, _endPosX, _endPosY) {
 	this.color = "#FF0000";
 	this.lives = 1;
 	this.isVisible = true;
+	this.radius = 5;
 
-	this.enemyShape = new Circle(_context, this.startX, this.startY, 10, this.color);
+	this.enemyShape = new Circle(_context, this.startX, this.startY, this.radius, this.color);
 
 	// Calculate inclination
 	this.xChange = (this.endX - this.enemyShape.x) / 1000;

@@ -42,6 +42,7 @@ Game.prototype.start = function() {
 
 	// Create VIP
 	this.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
+	$("#baseLive").val(this.vip.lives);
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
@@ -50,6 +51,7 @@ Game.prototype.start = function() {
 
 // Draw
 Game.prototype.draw = function() {
+	var that = this;
 	this.clearCanvas();
 	
 	// Draw VIP
@@ -60,7 +62,10 @@ Game.prototype.draw = function() {
 		tower.draw();
 		// Bullets
 		tower.bullets.forEach(function(bullet) {
-			bullet.draw();
+			if( that.isColliding(bullet.bulletCollisionShape, tower.rangeCollisionShape) )								  
+					bullet.draw();
+			else
+				console.log("outer");
 		});
 	});
 	
@@ -81,6 +86,7 @@ Game.prototype.draw = function() {
 // Update Game
 Game.prototype.update = function() {
 	this.checkCollision();
+
 	if(this.vip.lives <= 0)
 		this.stop();
 }
@@ -101,31 +107,30 @@ Game.prototype.stop = function() {
 Game.prototype.checkCollision = function() {
 	var vip = this.vip;
 	var towers = this.towers;
+	var that = this;
   
   // Enemy collision detection
   this.enemies.forEach(function(enemy) {
   	if(enemy.isVisible) {
   		
   		// Collision with base
-			if(enemy.enemyShape.x > vip.x && enemy.enemyShape.x < (vip.x + vip.width) 
-				&& enemy.enemyShape.y > vip.y && enemy.enemyShape.y < (vip.y + vip.height)) {
+			if(that.isColliding(enemy.enemyShape, vip)) {
 				enemy.remove(); // TODO: remove from enemies-array
 				vip.setDamage();
 			}
 
-			// Collision with tower
+			// Tower
 			towers.forEach(function(tower) {
-				if(enemy.enemyShape.x > tower.x && enemy.enemyShape.x < (tower.x + tower.radius) 
-				&& enemy.enemyShape.y > tower.y && enemy.enemyShape.y < ( tower.y +  tower.radius)) {
-					enemy.remove(); // TODO: remove from enemies-array
-				 	tower.setDamage();
-				}
+				if(tower.lives>0) {
 
-				// Collision with tower range
-				if( enemy.enemyShape.x > tower.rangeCollisionShape.x 
-					&& enemy.enemyShape.x < (tower.rangeCollisionShape.x + tower.rangeCollisionShape.width)
-					&& enemy.enemyShape.y > tower.rangeCollisionShape.y
-					&& enemy.enemyShape.y < ( tower.rangeCollisionShape.y +  tower.rangeCollisionShape.height) ) {
+					// Collision with tower
+					if(that.isColliding(enemy.enemyShape, tower.collisionShape)) {
+						enemy.remove(); // TODO: remove from enemies-array
+					 	tower.setDamage();
+					}
+
+					// Collision with tower range
+					if(that.isColliding(enemy.enemyShape, tower.rangeCollisionShape))
 						tower.shoot(enemy.enemyShape.x, enemy.enemyShape.y);
 				}
 			});
@@ -173,9 +178,9 @@ Game.prototype.createEnemy = function() {
 // Create Tower
 Game.prototype.initAddTower = function(e) {
 	this.drawNewTower = true;
-	this.m = new Circle(this._canvasContext, e.pageX, e.pageY, 20, "#7F3300");
+	this.m = new Circle(this._canvasContext, e.pageX, e.pageY, 20, 'rgba(17, 17, 17, 0.8)');
 	$("#canvas").mousemove($.proxy(this.bindTowerToMouse, this));	
-	$("#canvas").click($.proxy(this.createTower, this));
+	$("#canvas").mousedown($.proxy(this.createTower, this));
 };
 Game.prototype.bindTowerToMouse = function(e) {	
 	if(this.drawNewTower) {		
@@ -188,7 +193,7 @@ Game.prototype.createTower = function(e) {
 	e.stopPropagation();
 	this.drawNewTower = false;
 	$("#canvas").unbind("mousemove", this.createTower);
-	$("#canvas").unbind("click", this.createTower);
+	$("#canvas").unbind("mousedown", this.createTower);
 };
 
 
@@ -219,3 +224,14 @@ Game.prototype.getMousePosition = function(e) {
 
 	return [x,y];
 };
+
+// Returns true if object1 is in object2 (Rectangle)
+Game.prototype.isColliding = function(obj1, obj2) {
+	if(	obj1.x > obj2.x &&
+			obj1.x < (obj2.x + obj2.width) &&
+			obj1.y > obj2.y &&
+			obj1.y < ( obj2.y +  obj2.height) )	{
+				return true;
+			}
+	return false;
+}
