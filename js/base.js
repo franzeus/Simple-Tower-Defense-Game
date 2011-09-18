@@ -1,4 +1,4 @@
-Vip = function(_context, _canvasW, _canvasH) {
+Base = function(_context, _canvasW, _canvasH) {
 
 	var that = this;
 
@@ -12,16 +12,16 @@ Vip = function(_context, _canvasW, _canvasH) {
 	this.color = "#FFD800";
 	this.lives = 15;
 
-	this.vipShape = new Rectangle(_context, this.x, this.y, this.width, this.height, this.color  );
+	this.baseShape = new Rectangle(_context, this.x, this.y, this.width, this.height, this.color  );
 	
 	$("#baseLive").val(this.lives);
 };
 
-Vip.prototype.draw = function() {	
-	this.vipShape.draw();
+Base.prototype.draw = function() {	
+	this.baseShape.draw();
 };
 //
-Vip.prototype.setDamage = function() {	
+Base.prototype.setDamage = function() {	
 		this.lives--;
 		$("#baseLive").val(this.lives);
 };

@@ -9,10 +9,12 @@ var Game = function() {
 	this.FPS;
 	this.interval = 0;
 
-	this.vip = null;
+	this.base = null;
 	this.towers = [];
 	this.enemies = [];
 	this.itemMenu = null;
+
+	this.player = null;
 
 	this.drawNewTower = false;
 	this.m = null;
@@ -40,8 +42,10 @@ Game.prototype.start = function() {
 	$("#canvas").mousedown($.proxy(this.clickEvent, this));
 	$(".createTowerButton").click($.proxy(this.initAddTower, this));
 
-	// Create VIP
-	this.vip = new Vip(this._canvasContext, this.WIDTH, this.HEIGHT);
+	// Create Base
+	this.base = new Base(this._canvasContext, this.WIDTH, this.HEIGHT);
+
+	this.player = new Player("Player1", 200);
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
@@ -54,7 +58,7 @@ Game.prototype.draw = function() {
 	this.clearCanvas();
 	
 	// Draw VIP
-	this.vip.draw();
+	this.base.draw();
 
 	// Draw Towers
 	this.towers.forEach(function(tower) {
@@ -86,7 +90,7 @@ Game.prototype.draw = function() {
 Game.prototype.update = function() {
 	this.checkCollision();
 
-	if(this.vip.lives <= 0)
+	if(this.base.lives <= 0)
 		this.stop();
 }
 
@@ -104,7 +108,7 @@ Game.prototype.stop = function() {
 
 //
 Game.prototype.checkCollision = function() {
-	var vip = this.vip;
+	var base = this.base;
 	var towers = this.towers;
 	var that = this;
   
@@ -113,9 +117,9 @@ Game.prototype.checkCollision = function() {
   	if(enemy.isVisible) {
   		
   		// Collision with base
-			if(that.isColliding(enemy.enemyShape, vip)) {
+			if(that.isColliding(enemy.enemyShape, base)) {
 				enemy.remove(); // TODO: remove from enemies-array
-				vip.setDamage();
+				base.setDamage();
 			}
 
 			// Tower
@@ -173,7 +177,7 @@ Game.prototype.createEnemy = function() {
 		var randomX = this.getRandomNumber(0, this.WIDTH) + this.WIDTH;
 		var randomY = this.getRandomNumber(0, this.HEIGHT) + this.HEIGHT;
 	}
-	this.enemies.push(new Enemy(this._canvasContext, randomX, randomY, this.vip.x + (this.vip.width / 2), this.vip.y  + (this.vip.height / 2)));
+	this.enemies.push(new Enemy(this._canvasContext, randomX, randomY, this.base.x + (this.base.width / 2), this.base.y  + (this.base.height / 2)));
 }
 
 // ------------------------------------------------------

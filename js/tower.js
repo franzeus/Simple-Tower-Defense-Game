@@ -28,7 +28,7 @@ Tower = function(_context, _posX, _posY) {
 	this.collisionShape = new Rectangle( _context ,this.x - (this.radius), this.y - (this.radius), this.radius * 2, this.radius * 2, this.rangeColor );
 	this.rangeCollisionShape = new Rectangle( _context ,this.x - (this.range), this.y - (this.range), this.range * 2, this.range * 2, this.rangeColor );
 
-	this.shootInterval;
+	this.shootInterval = 0;
 	this.init();
 };
 
@@ -46,14 +46,11 @@ Tower.prototype.draw = function() {
 };
 // Shoot bullet
 Tower.prototype.shoot = function(_enemyPosX, _enemyPosY) {
-	if(!this.shootInterval) {
-		this.shootInterval = setInterval(this.shoot, this.shootsPerSeconds * 1000);
-		var posEndX = _enemyPosX;
-		var posEndY = _enemyPosY;
-		this.bullets.push(new Bullet(this.canvasContext, this.x, this.y, posEndX, posEndY));
-		clearInterval(this.shootInterval);
+	if(!this.shootInterval){
+		this.bullets.push(new Bullet(this.canvasContext, this.x, this.y, _enemyPosX, _enemyPosY));
+		this.shootInterval = window.setTimeout(this.shoot, this.shootsPerSeconds * 1000);
+		window.clearTimeout(this.shootInterval);
 	}
-
 };
 
 Tower.prototype.clickEvent = function() {
