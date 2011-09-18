@@ -6,19 +6,20 @@ var Game = function() {
 	this.HEIGHT;
 	this.WIDTH;
 	this._canvasContext = null;
-	this.FPS;
+	this.FPS = 50;
 	this.interval = 0;
 
 	this.base = null;
 	this.towers = [];
 	this.enemies = [];
-	this.itemMenu = null;
-
 	this.player = null;
 
-	this.drawNewTower = false;
-										// name, costs, radius, range, lives
-	this.towerTypes = [ ['normal', 100, 10, 60, 2, "#111111"], ['long', 150, 15, 100, 1, "#00111F"] ];
+	this.drawNewTower = false;										
+	this.towerTypes = [ // name, costs, radius, range, lives
+											['normal', 100, 10, 60, 2, "#111111"], 
+											['long', 150, 15, 100, 1, "#00111F"],
+											['heavy', 200, 20, 50, 4, "#222222"] 
+										];
 	this.newTowerType;
 	this.m = null;
 	
@@ -45,12 +46,10 @@ Game.prototype.start = function() {
 	$("#canvas").mousedown($.proxy(this.clickEvent, this));
 	$(".createTowerButton").click($.proxy(this.initAddTower, this));
 
-	// Create Base
-	this.base = new Base(this._canvasContext, this.WIDTH, this.HEIGHT);
 
+	this.base = new Base(this._canvasContext, this.WIDTH, this.HEIGHT);
 	this.player = new Player(1, 1250);
 
-	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
 	this.spawnInterval = setInterval(function() { that.createEnemy() }, 4000);
 };
