@@ -45,7 +45,7 @@ Game.prototype.start = function() {
 	// Create Base
 	this.base = new Base(this._canvasContext, this.WIDTH, this.HEIGHT);
 
-	this.player = new Player("Player1", 200);
+	this.player = new Player(1, 250);
 
 	this.FPS = 50;
 	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
@@ -183,6 +183,9 @@ Game.prototype.createEnemy = function() {
 // ------------------------------------------------------
 // Create Tower
 Game.prototype.initAddTower = function(e) {
+
+	if(this.player.money - 100 < 0) return false;
+
 	this.drawNewTower = true;
 	this.m = new Circle(this._canvasContext, e.pageX, e.pageY, 20, 'rgba(17, 17, 17, 0.8)');
 	$("#canvas").mousemove($.proxy(this.bindTowerToMouse, this));	
@@ -196,6 +199,7 @@ Game.prototype.bindTowerToMouse = function(e) {
 }
 Game.prototype.createTower = function(e) {
 	this.towers.push(new Tower(this._canvasContext, e.pageX - 40, e.pageY - 40));
+	this.player.reduceMoney(100);
 	e.stopPropagation();
 	this.drawNewTower = false;
 	$("#canvas").unbind("mousemove", this.createTower);
