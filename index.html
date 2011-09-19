@@ -5,9 +5,10 @@
 
 <style>
 		body { color:#FFFFFF; background:#111111; font-family: Arial; font-size:0.8em; margin:0;}
-		canvas { background:#333333 url(images/bg2.jpg); padding:2em; display:block;}
+		canvas { background:#333333 url(images/bg2.jpg); display:block; margin:auto;}
     input { color:#FFFFFF; background:#000000; border:1px solid #CCCCCC; }
     #info { margin-top:1em; background:#000000; width:480px; padding:0.5em; overflow:hidden;}
+    #wrapper {margin:auto; width:800px; overflow:hidden; background:#000000; padding:0.4em;}
 </style>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
@@ -17,15 +18,18 @@
 </head>
 <body>
 
-<canvas id="canvas" width="480" height="340">Your browser doesnt know html5 canvas</canvas>
-<canvas id="buffer-canvas" width="480" height="340" style="display:none;">Your browser doesnt know html5 canvas</canvas>
-<input type="button" id="0" class="createTowerButton" value="Tower">
-<input type="button" id="1" class="createTowerButton"  value="LongRange Tower">
-<input type="button" id="2" class="createTowerButton"  value="Heavy Tower">
+<canvas id="canvas" width="800px" height="500px" >Your browser doesnt know html5 canvas</canvas>
+<canvas id="buffer-canvas" width="800px" height="500px" style="display:none;">Your browser doesnt know html5 canvas</canvas>
 
-Base-Health: <input type="text" readonly="readonly" id="baseLive" size="2">
-Money: <input type="text" readonly="readonly" id="money" size="2">
-<div id="info"></div>
+<div id="wrapper">
+  <input type="button" id="0" class="createTowerButton" value="Tower">
+  <input type="button" id="1" class="createTowerButton"  value="LongRange Tower">
+  <input type="button" id="2" class="createTowerButton"  value="Heavy Tower">
+
+  Base-Health: <input type="text" readonly="readonly" id="baseLive" size="2">
+  Money: <input type="text" readonly="readonly" id="money" size="2">
+  <div id="info"></div>
+</div>
 
 <script src="js/player.js"></script>
 <script src="js/shapes.js"></script>

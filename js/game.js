@@ -204,12 +204,13 @@ Game.prototype.initAddTower = function(e) {
 };
 Game.prototype.bindTowerToMouse = function(e) {	
 	if(this.drawNewTower) {		
-		this.m.x = e.pageX - 40;
-		this.m.y = e.pageY - 40;		
+		this.m.x = this.getMousePosition(e)[0];// e.pageX - $("canvas").offset().left;
+		this.m.y = this.getMousePosition(e)[1]; //e.pageY - $("canvas").offset().top;		
 	}
 }
 Game.prototype.createTower = function(e) {
-	this.towers.push(new Tower(this._canvasContext, e.pageX - 40, e.pageY - 40, this.newTowerType[1], this.newTowerType[2], this.newTowerType[3], this.newTowerType[4], this.newTowerType[5]));
+
+	this.towers.push(new Tower(this._canvasContext, this.getMousePosition(e)[0], this.getMousePosition(e)[1], this.newTowerType[1], this.newTowerType[2], this.newTowerType[3], this.newTowerType[4], this.newTowerType[5]));
 	this.player.reduceMoney(this.newTowerType[1]);
 	e.stopPropagation();
 	this.drawNewTower = false;
@@ -243,6 +244,8 @@ Game.prototype.getMousePosition = function(e) {
   	x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
   	y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
 	}
+	x -= $("canvas").offset().left;
+	y -= $("canvas").offset().top;
 	return [x,y];
 };
 
