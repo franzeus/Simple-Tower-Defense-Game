@@ -14,8 +14,6 @@ Tower = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color
 	this.color = _color;
 	this.lives = _lives;
 
-	
-
 	// Range
 	this.isDisplayRange = false;
 	this.rangeColor = 'rgba(255, 214, 229, 0.5)';

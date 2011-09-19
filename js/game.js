@@ -65,12 +65,14 @@ Game.prototype.draw = function() {
 
 	// Draw Towers
 	this.towers.forEach(function(tower) {
-		tower.draw();
-		// Bullets
-		tower.bullets.forEach(function(bullet) {
-			if( that.isColliding(bullet.bulletCollisionShape, tower.rangeCollisionShape) && bullet.isVisible)								  
-					bullet.draw();
-		});
+		if(tower.lives > 0) {
+			tower.draw();
+			// Bullets
+			tower.bullets.forEach(function(bullet) {
+				if( that.isColliding(bullet.bulletCollisionShape, tower.rangeCollisionShape) && bullet.isVisible)								  
+						bullet.draw();
+			});
+		}
 	});
 	
 	// Draw Enemies
