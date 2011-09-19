@@ -7,7 +7,8 @@ var Game = function() {
 	this.WIDTH;
 	this._canvasContext = null;
 	this.FPS = 50;
-	this.interval = 0;
+	var interval = 0;
+	var spawnInterval;
 
 	this.base = null;
 	this.towers = [];
@@ -15,10 +16,10 @@ var Game = function() {
 	this.player = null;
 
 	this.drawNewTower = false;										
-	this.towerTypes = [ // name, costs, radius, range, lives
-											['normal', 100, 10, 60, 2, "#111111"], 
-											['long', 150, 15, 100, 1, "#00111F"],
-											['heavy', 200, 20, 50, 4, "#222222"] 
+	this.towerTypes = [ // name, costs, radius, range, lives, shootInterval
+											['normal', 100, 10, 60, 2, "#111111", 1], 
+											['long', 150, 15, 100, 1, "#00111F", 2],
+											['heavy', 200, 20, 50, 4, "#222222", 2] 
 										];
 	this.newTowerType;
 	this.m = null;
@@ -50,8 +51,8 @@ Game.prototype.start = function() {
 	this.base = new Base(this._canvasContext, this.WIDTH, this.HEIGHT);
 	this.player = new Player(1, 1250);
 
-	this.interval = setInterval(function() { that.draw() }, 1000 / this.FPS);
-	this.spawnInterval = setInterval(function() { that.createEnemy() }, 4000);
+	interval 			= window.setInterval(function() { that.draw() }, 1000 / this.FPS);
+	spawnInterval = window.setInterval(function() { that.createEnemy() }, 4000);
 };
 
 // Draw
@@ -128,10 +129,12 @@ Game.prototype.checkCollision = function() {
 
 					// Collision with tower bullet
 					tower.bullets.forEach(function(bullet) {
-						if(that.isColliding(enemy.enemyShape, bullet.bulletCollisionShape)) {
-							enemy.remove(); //tower.bulletPower;
-							bullet.remove();
-							player.addMoney(100);
+						if(bullet.isVisible) {
+							if(that.isColliding(bullet.bulletCollisionShape, enemy.enemyShape)) {
+								enemy.remove(); //tower.bulletPower;
+								bullet.remove();
+								player.addMoney(100);
+							}
 						}
 					});
 
@@ -210,7 +213,7 @@ Game.prototype.bindTowerToMouse = function(e) {
 }
 Game.prototype.createTower = function(e) {
 
-	this.towers.push(new Tower(this._canvasContext, this.getMousePosition(e)[0], this.getMousePosition(e)[1], this.newTowerType[1], this.newTowerType[2], this.newTowerType[3], this.newTowerType[4], this.newTowerType[5]));
+	this.towers.push(new Tower(this._canvasContext, this.getMousePosition(e)[0], this.getMousePosition(e)[1], this.newTowerType[1], this.newTowerType[2], this.newTowerType[3], this.newTowerType[4], this.newTowerType[5],  this.newTowerType[6]));
 	this.player.reduceMoney(this.newTowerType[1]);
 	e.stopPropagation();
 	this.drawNewTower = false;

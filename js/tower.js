@@ -1,4 +1,5 @@
-Tower = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color) { 
+var isAllowedToShoot = true; // .. dont like this
+Tower = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color, _shootInterval) { 
 	this.canvasContext = _context;
 
 	this.id = 1;
@@ -8,10 +9,12 @@ Tower = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color
 	this.radius = _radius;
 	this.size = _radius;
 	this.range = _range;
-	this.shootsPerSeconds = 1;
+	this.shootsPerSeconds = _shootInterval;
 	this.costs = _costs;
 	this.color = _color;
 	this.lives = _lives;
+
+	
 
 	// Range
 	this.isDisplayRange = false;
@@ -32,7 +35,6 @@ Tower = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color
 };
 
 Tower.prototype.init = function() {
-	//this.interval = setInterval(this.shoot, this.shootsPerSeconds * 1000);
 };
 
 // Draw Tower on canvas
@@ -45,12 +47,18 @@ Tower.prototype.draw = function() {
 };
 // Shoot bullet
 Tower.prototype.shoot = function(_enemyPosX, _enemyPosY) {
-	if(!this.shootInterval){
+	if(isAllowedToShoot){
 		this.bullets.push(new Bullet(this.canvasContext, this.x, this.y, _enemyPosX, _enemyPosY));
-		this.shootInterval = window.setTimeout("this.shoot", this.shootsPerSeconds * 1000);
-		window.clearTimeout(this.shootInterval);
+		isAllowedToShoot = false;
+		this.shootInterval = setTimeout("releaseShoot()", 1000 / this.shootsPerSeconds);
 	}
 };
+
+var releaseShoot = function() {
+	isAllowedToShoot = true;
+	window.clearTimeout(this.shootInterval);
+}
+
 
 //
 Tower.prototype.clickEvent = function() {

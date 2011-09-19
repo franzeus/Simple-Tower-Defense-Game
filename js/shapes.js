@@ -45,7 +45,7 @@ ImageShape = function(_context, _x, _y, _w, _h, _src, _angle) {
 //
 ImageShape.prototype.draw = function() {
 	this.canvasContext.save();
-	this.canvasContext.rotate(this.angle * Math.PI / 180);
+	this.canvasContext.rotate(this.angle * Math.PI  / 180);
 	this.canvasContext.drawImage(this.img, this.x, this.y, this.width, this.height);
 	this.canvasContext.restore();
 };
