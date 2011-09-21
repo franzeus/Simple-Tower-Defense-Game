@@ -134,8 +134,9 @@ Game.prototype.checkCollision = function() {
 						if(bullet.isVisible) {
 							if(that.isColliding(bullet.bulletCollisionShape, enemy.enemyShape)) {
 								enemy.decreaseLive(tower.bulletPower);
-								bullet.remove();
-								player.addMoney(100);
+								if(enemy.lives <= 0)
+									player.addMoney(enemy.money);
+								bullet.remove();	
 							}
 						}
 					});
@@ -169,6 +170,15 @@ Game.prototype.clickEvent = function(e) {
 				y >= tower.collisionShape.y &&
 				y <= tower.collisionShape.y + tower.collisionShape.height)
 			tower.clickEvent();
+	});
+
+		// Check onClick Towers
+	this.enemies.forEach(function(enemy) {
+		if(	x >= enemy.enemyShape.x && 
+				x <= (enemy.enemyShape.x + enemy.enemyShape.width) && 
+				y >= enemy.enemyShape.y &&
+				y <= enemy.enemyShape.y + enemy.enemyShape.height)
+			enemy.clickEvent();
 	});
 }
 

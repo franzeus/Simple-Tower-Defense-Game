@@ -11,6 +11,7 @@ Enemy = function(_context, _posX, _posY, _endPosX, _endPosY) {
 	this.lives = 1;
 	this.isVisible = true;
 	this.radius = 2;
+	this.money = 50;
 
 	
 	this.enemyDamageShape = new Rectangle(_context, this.startX + 2, this.startY - 2, 10, 2, this.color);
@@ -49,4 +50,10 @@ Enemy.prototype.decreaseLive = function(_amount) {
 //
 Enemy.prototype.remove = function() {
 	this.isVisible = false;
+};
+
+//
+Enemy.prototype.clickEvent = function() {
+	var infoText = "Health: " + this.lives;
+	$("#info").html(infoText);
 };

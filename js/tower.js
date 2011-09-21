@@ -58,7 +58,6 @@ var releaseShoot = function() {
 	window.clearTimeout(this.shootInterval);
 }
 
-
 //
 Tower.prototype.clickEvent = function() {
 	this.isDisplayRange = !this.isDisplayRange;
