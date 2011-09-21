@@ -10,9 +10,10 @@ Enemy = function(_context, _posX, _posY, _endPosX, _endPosY) {
 	this.color = "#FF0000";
 	this.lives = 1;
 	this.isVisible = true;
-	this.radius = 5;
+	this.radius = 2;
 
-	//this.enemyShape = new Circle(_context, this.startX, this.startY, this.radius, this.color);
+	
+	this.enemyDamageShape = new Rectangle(_context, this.startX + 2, this.startY - 2, 10, 2, this.color);
 	this.enemyShape = new ImageShape(_context, this.startX, this.startY, 15, 22, "images/jet.gif", 0);
 
 	// Calculate inclination
@@ -26,10 +27,25 @@ Enemy = function(_context, _posX, _posY, _endPosX, _endPosY) {
 Enemy.prototype.draw = function() {
 	if(this.isVisible) {
 		this.enemyShape.x += this.xChange;
-		this.enemyShape.y += this.yChange;
+		this.enemyShape.y += this.yChange		
+		this.enemyDamageShape.x += this.xChange;
+		this.enemyDamageShape.y += this.yChange;
 		this.enemyShape.draw();
+		if(this.lives < 1)
+			this.enemyDamageShape.draw();
 	}
 };
+
+//
+Enemy.prototype.decreaseLive = function(_amount) {
+	if(this.lives - _amount <= 0) {		
+		this.remove();
+		return false;
+	}
+	this.enemyDamageShape.width -= _amount * 10;
+	this.lives -= _amount;
+};
+
 //
 Enemy.prototype.remove = function() {
 	this.isVisible = false;

@@ -1,5 +1,5 @@
 var isAllowedToShoot = true; // .. dont like this
-Tower = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color, _shootInterval) { 
+Tower = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color, _shootInterval, _bulletPower) { 
 	this.canvasContext = _context;
 
 	this.id = 1;
@@ -13,6 +13,7 @@ Tower = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color
 	this.costs = _costs;
 	this.color = _color;
 	this.lives = _lives;
+	this.bulletPower = _bulletPower;
 
 	// Range
 	this.isDisplayRange = false;
@@ -62,7 +63,7 @@ var releaseShoot = function() {
 Tower.prototype.clickEvent = function() {
 	this.isDisplayRange = !this.isDisplayRange;
 
-	var infoText = "Health: " + this.lives + " Range: " + this.range + " ShootsPerSecons: " + this.shootsPerSeconds;
+	var infoText = "Health: " + this.lives + " Range: " + this.range + " ShootsPerSecons: " + this.shootsPerSeconds + " Power: " + this.bulletPower;
 	$("#info").html(infoText);
 };
 

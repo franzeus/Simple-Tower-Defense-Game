@@ -16,10 +16,10 @@ var Game = function() {
 	this.player = null;
 
 	this.drawNewTower = false;										
-	this.towerTypes = [ // name, costs, radius, range, lives, shootInterval
-											['normal', 100, 10, 60, 2, "#111111", 1], 
-											['long', 150, 15, 100, 1, "#00111F", 2],
-											['heavy', 200, 20, 50, 4, "#222222", 2] 
+	this.towerTypes = [ // name, costs, radius, range, lives, shootInterval, bulletPower
+											['normal', 100, 10, 60, 2, "#111111", 1, 0.5], 
+											['long', 150, 15, 100, 1, "#00111F", 2, 0.2],
+											['heavy', 200, 20, 50, 4, "#222222", 2, 1] 
 										];
 	this.newTowerType;
 	this.m = null;
@@ -133,7 +133,7 @@ Game.prototype.checkCollision = function() {
 					tower.bullets.forEach(function(bullet) {
 						if(bullet.isVisible) {
 							if(that.isColliding(bullet.bulletCollisionShape, enemy.enemyShape)) {
-								enemy.remove(); //tower.bulletPower;
+								enemy.decreaseLive(tower.bulletPower);
 								bullet.remove();
 								player.addMoney(100);
 							}
@@ -149,7 +149,6 @@ Game.prototype.checkCollision = function() {
 					// Collision with tower range
 					if(that.isColliding(enemy.enemyShape, tower.rangeCollisionShape))
 						tower.shoot(enemy.enemyShape.x, enemy.enemyShape.y);
-
 				}
 			});
 		}
@@ -215,7 +214,7 @@ Game.prototype.bindTowerToMouse = function(e) {
 }
 Game.prototype.createTower = function(e) {
 
-	this.towers.push(new Tower(this._canvasContext, this.getMousePosition(e)[0], this.getMousePosition(e)[1], this.newTowerType[1], this.newTowerType[2], this.newTowerType[3], this.newTowerType[4], this.newTowerType[5],  this.newTowerType[6]));
+	this.towers.push(new Tower(this._canvasContext, this.getMousePosition(e)[0], this.getMousePosition(e)[1], this.newTowerType[1], this.newTowerType[2], this.newTowerType[3], this.newTowerType[4], this.newTowerType[5],  this.newTowerType[6], this.newTowerType[7]));
 	this.player.reduceMoney(this.newTowerType[1]);
 	e.stopPropagation();
 	this.drawNewTower = false;
