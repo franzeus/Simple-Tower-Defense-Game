@@ -23,7 +23,8 @@ var Game = function() {
 										];
 	this.newTowerType;
 	this.m = null;
-	
+	this.isDisplayRange = false;
+
 	this.start();
 };
 
@@ -46,7 +47,7 @@ Game.prototype.start = function() {
 	// Events
 	$("#canvas").mousedown($.proxy(this.clickEvent, this));
 	$(".createTowerButton").click($.proxy(this.initAddTower, this));
-
+	$(document).keydown($.proxy(this.keyEvents, this));
 
 	this.base = new Base(this._canvasContext, this.WIDTH, this.HEIGHT);
 	this.player = new Player(1, 1250);
@@ -156,6 +157,8 @@ Game.prototype.checkCollision = function() {
 	});
 };
 
+// ------------------------------------------------------
+// EVENTS
 
 // on canvas click event
 Game.prototype.clickEvent = function(e) {
@@ -180,6 +183,18 @@ Game.prototype.clickEvent = function(e) {
 				y <= enemy.enemyShape.y + enemy.enemyShape.height)
 			enemy.clickEvent();
 	});
+}
+
+// KeyEvents
+Game.prototype.keyEvents = function(e) {
+	
+	//console.log(e.keyCode);
+	switch(e.keyCode) {
+		case(82):
+			this.toggleTowerRanges(); break;
+	}
+
+
 }
 
 // ------------------------------------------------------
@@ -233,7 +248,14 @@ Game.prototype.createTower = function(e) {
 	$("#canvas").unbind("mousedown", this.createTower);
 };
 
-
+// Toggle show ranges of tower
+Game.prototype.toggleTowerRanges = function() {
+	var show = !this.isDisplayRange;
+	this.towers.forEach(function(tower) {		
+			tower.isDisplayRange = show;
+	});
+	this.isDisplayRange = !this.isDisplayRange;
+}
 
 // ------------------------------------------------------
 // HELPERS
