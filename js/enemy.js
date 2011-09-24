@@ -12,7 +12,6 @@ Enemy = function(_context, _posX, _posY, _endPosX, _endPosY) {
 	this.isVisible = true;
 	this.radius = 2;
 	this.money = 50;
-
 	
 	this.enemyDamageShape = new Rectangle(_context, this.startX + 2, this.startY - 2, 10, 2, this.color);
 	this.enemyShape = new ImageShape(_context, this.startX, this.startY, 15, 22, "images/jet.gif", 0);

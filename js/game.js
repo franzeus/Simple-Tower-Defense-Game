@@ -28,8 +28,6 @@ var Game = function() {
 	$(".startGameButton").click($.proxy(this.start, this));
 	$(document).keydown($.proxy(this.keyEvents, this));
 
-
-
 	this.drawNewTower = false;										
 	this.towerTypes = [ // name, costs, radius, range, lives, shootInterval, bulletPower
 											['normal', 100, 10, 60, 2, "#111111", 1, 0.5], 
@@ -113,6 +111,7 @@ Game.prototype.clearCanvas = function() {
 // Stop Game
 Game.prototype.stop = function() {
     clearInterval(interval);
+    clearInterval(spawnInterval);
     interval = 0;
 };
 
@@ -242,10 +241,10 @@ Game.prototype.createEnemy = function() {
 Game.prototype.initAddTower = function(e) {
 	if(this.player.money - 100 < 0) return false;
 
-	this.newTowerType = this.towerTypes[e.currentTarget.id];
+	this.newTowerType = e.currentTarget.id;
 
 	this.drawNewTower = true;
-	this.m = new Circle(this._canvasContext, e.pageX, e.pageY, this.newTowerType[2] + 5, 'rgba(17, 17, 17, 0.8)');
+	this.m = new Circle(this._canvasContext, e.pageX, e.pageY, 25, 'rgba(17, 17, 17, 0.8)');
 	$("#canvas").mousemove($.proxy(this.bindTowerToMouse, this));	
 	$("#canvas").mousedown($.proxy(this.createTower, this));
 };
@@ -256,12 +255,21 @@ Game.prototype.bindTowerToMouse = function(e) {
 	}
 }
 Game.prototype.createTower = function(e) {
+	var newTowerObject = null;
 
-	this.towers.push(new Tower(this._canvasContext, this.getMousePosition(e)[0], this.getMousePosition(e)[1], this.newTowerType[1], this.newTowerType[2], this.newTowerType[3], this.newTowerType[4], this.newTowerType[5],  this.newTowerType[6], this.newTowerType[7]));
-	this.player.reduceMoney(this.newTowerType[1]);
+	if(this.newTowerType == "long")
+		newTowerObject = new TowerLong(this._canvasContext, this.getMousePosition(e)[0], this.getMousePosition(e)[1]);
+	else if(this.newTowerType == "heavy")
+		newTowerObject = new TowerHeavy(this._canvasContext, this.getMousePosition(e)[0], this.getMousePosition(e)[1]);
+	else
+		newTowerObject = new TowerNormal(this._canvasContext, this.getMousePosition(e)[0], this.getMousePosition(e)[1]);
+
+	this.towers.push(newTowerObject);
+	this.player.reduceMoney(newTowerObject.costs);
+	// Clean
 	e.stopPropagation();
-	this.drawNewTower = false;
-	this.newTowerType = [];
+	this.drawNewTower = false;	
+	this.newTowerType = 0;
 	$("#canvas").unbind("mousemove", this.createTower);
 	$("#canvas").unbind("mousedown", this.createTower);
 };

@@ -1,5 +1,8 @@
 // Base Class
 Shape = function(_context, _x, _y, _color) {	
+	this.init(_context, _x, _y, _color);
+}
+Shape.prototype.init = function(_context, _x, _y, _color) {	
 	this.x = _x;
 	this.y = _y;
 	this.color = _color;
@@ -12,6 +15,7 @@ Circle = function(_context, _x, _y, _r, _color) {
 	this.radius = _r;
 };
 Circle.prototype = new Shape();
+
 //
 Circle.prototype.draw = function() {
 	this.canvasContext.beginPath();
