@@ -161,7 +161,7 @@ class Game
   toggleTowerRanges: ->
     show = not @isDisplayRange
     @towers.forEach (tower) ->
-        tower.isDisplayRange = show
+      tower.isDisplayRange = show
 
     @isDisplayRange = not @isDisplayRange
 
@@ -174,11 +174,11 @@ class Game
   # ----------------------------
   getMousePosition: (e) ->
     if e.pageX or e.pageY
-        x = e.pageX
-        y = e.pageY
+      x = e.pageX
+      y = e.pageY
     else
-        x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft
-        y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
+      x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft
+      y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
 
     x -= $("canvas").offset().left
     y -= $("canvas").offset().top

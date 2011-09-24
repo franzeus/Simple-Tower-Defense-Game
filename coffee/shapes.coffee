@@ -15,20 +15,20 @@ class Circle extends Shape
 
 # -------------------------------------------------
 class Rectangle extends Shape
-	constructor : (@canvasContext, @x, @y, @width, @height, @color) ->
+  constructor : (@canvasContext, @x, @y, @width, @height, @color) ->
     super(@canvasContext, @x, @y, @color)
     
-   draw: ->
-   	@canvasContext.fillStyle = @color
+  draw: ->
+    @canvasContext.fillStyle = @color
     @canvasContext.fillRect @x, @y, @width, @height
 
 # -------------------------------------------------
 class ImageShape extends Shape
 	constructor : (@canvasContext, @x, @y, @width, @height, @src, @angle) ->
     super(@canvasContext, @x, @y)
-		imgObj = new Image
-	  imgObj.src = @src
-    
+    imgObj = new Image
+    imgObj.src = @src
+
   draw: ->
     @canvasContext.save
     @canvasContext.rotate @angle * Math.PI  / 180

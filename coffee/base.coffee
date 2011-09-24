@@ -1,5 +1,5 @@
 class Base 
-  constructor : (@canvasContext, _canvasW, _canvasH) ->
+  constructor: (@canvasContext, _canvasW, _canvasH) ->
     @height = 40
     @width = 40
     @x = (_canvasW / 2) - (@width / 2)
