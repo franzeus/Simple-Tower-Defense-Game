@@ -14,24 +14,24 @@ class Enemy
 		@yChange = (@endY - @enemyShape.y) / 1000
 
 	draw: ->
-	  	if @isVisible
-		    @enemyShape.x += @xChange
-		    @enemyShape.y += @yChange
-		    @enemyDamageShape.x += @xChange
-		    @enemyDamageShape.y += @yChange
-		    @enemyShape.draw()
-		    @enemyDamageShape.draw()  if @lives < 1
+		if @isVisible
+	    @enemyShape.x += @xChange
+	    @enemyShape.y += @yChange
+	    @enemyDamageShape.x += @xChange
+	    @enemyDamageShape.y += @yChange
+	    @enemyShape.draw()
+	    @enemyDamageShape.draw()  if @lives < 1
 
 	decreaseLive: (_amount) ->
-	  	if @lives - _amount <= 0
-	    	@remove()
-	    	return false
-	  	@enemyDamageShape.width -= _amount * 10
-	  	@lives -= _amount
+  	if @lives - _amount <= 0
+    	@remove()
+    	return false
+  	@enemyDamageShape.width -= _amount * 10
+  	@lives -= _amount
 
 	remove: ->
-  		@isVisible = false
+  	@isVisible = false
 
 	clickEvent: ->
-  		infoText = "Health: " + @lives
-  		$("#info").html infoText
+		infoText = "Health: " + @lives
+		$("#info").html infoText
