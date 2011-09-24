@@ -140,10 +140,10 @@ class Game
   initAddTower: (e) ->
     return false  if @player.money - 100 < 0
       
-    @newTowerType = @towerTypes[e.currentTarget.id]
+    @newTowerType = e.currentTarget.id
     @drawNewTower = true
-      
-    @m = new Circle(@_canvasContext, e.pageX, e.pageY, @newTowerType[2] + 5, "rgba(17, 17, 17, 0.8)")
+
+    @m = new Circle(@_canvasContext, e.pageX, e.pageY, 25, "rgba(17, 17, 17, 0.8)")
     $("#canvas").mousemove $.proxy(@bindTowerToMouse, this)
     $("#canvas").mousedown $.proxy(@createTower, this)
   
@@ -155,11 +155,20 @@ class Game
   
   # ----------------------------
   createTower: (e) ->
-    @towers.push new Tower(@_canvasContext, @getMousePosition(e)[0], @getMousePosition(e)[1], @newTowerType[1], @newTowerType[2], @newTowerType[3], @newTowerType[4], @newTowerType[5], @newTowerType[6], @newTowerType[7])
-    @player.reduceMoney @newTowerType[1]
+
+    newTowerObj = null;
+
+    if @newTowerType == "long"
+      newTowerObj = new TowerLong(@_canvasContext, @getMousePosition(e)[0], @getMousePosition(e)[1])
+    if @newTowerType == "heavy"
+      newTowerObj = new TowerHeavy(@_canvasContext, @getMousePosition(e)[0], @getMousePosition(e)[1])
+    else
+      newTowerObj = new TowerNormal(@_canvasContext, @getMousePosition(e)[0], @getMousePosition(e)[1])
+
+    @towers.push newTowerObj
+    @player.reduceMoney newTowerObj.costs
     e.stopPropagation()
     @drawNewTower = false
-    @newTowerType = []
     
     $("#canvas").unbind "mousemove", @createTower
     $("#canvas").unbind "mousedown", @createTower

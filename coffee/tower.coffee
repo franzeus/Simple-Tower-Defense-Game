@@ -10,43 +10,43 @@ class Tower
     @collisionShape = new Rectangle(@canvasContext, @x - (@radius), @y - (@radius), @radius * 2, @radius * 2, @rangeColor)
     @rangeCollisionShape = new Rectangle(@canvasContext, @x - (@range), @y - (@range), @range * 2, @range * 2, @rangeColor)
 		
-	draw: ->
+  draw: ->
 	  if @lives > 0
 	  	@showRange() if @isDisplayRange
 	  	@towerShape.draw()
 
-	shoot: (_enemyPosX, _enemyPosY) ->
-		if isAllowedToShoot
-		    @bullets.push new Bullet(@canvasContext, @x, @y, _enemyPosX, _enemyPosY)
-		isAllowedToShoot = false
-		shootInterval = setTimeout("releaseShoot()", 1000 / @shootsPerSeconds)
+  shoot: (_enemyPosX = 0, _enemyPosY = 0) ->
+    if isAllowedToShoot
+      @bullets.push new Bullet(@canvasContext, @x, @y, _enemyPosX, _enemyPosY)
+      isAllowedToShoot = false
+      shootInterval = setTimeout("releaseShoot()", 1000 / @shootsPerSeconds)
 
-	releaseShoot: ->
+  releaseShoot: ->
   	isAllowedToShoot = true
   	window.clearTimeout shootInterval
 
-	clickEvent: ->
-		@isDisplayRange = not @isDisplayRange
-		infoText = "Health: " + @lives + " Range: " + @range + " ShootsPerSecons: " + @shootsPerSeconds + " Power: " + @bulletPower
-		$("#info").html infoText
+  clickEvent: ->
+    @isDisplayRange = not @isDisplayRange
+    infoText = "Health: " + @lives + " Range: " + @range + " ShootsPerSecons: " + @shootsPerSeconds + " Power: " + @bulletPower
+    $("#info").html infoText
 
-	showRange: ->
-  	@rangeShape.draw()
+  showRange: ->
+    @rangeShape.draw()
 
-	setDamage: ->
-  	@lives--	
+  setDamage: ->
+    @lives--	
 
-	moveTo: (_x, _y) ->
-  	loop
-  		@towerShape.x += (_x - @towerShape.x) / 10
-  		@towerShape.y + -(_y - @towerShape.y) / 10
-  		setTimeout @moveTo, 30
-  		break unless @towerShape.x == _x and @towerShape.y == _y
+  moveTo: (_x, _y) ->
+    loop
+      @towerShape.x += (_x - @towerShape.x) / 10
+      @towerShape.y + -(_y - @towerShape.y) / 10
+      setTimeout @moveTo, 30
+      break unless @towerShape.x == _x and @towerShape.y == _y
 
 
 # ----------------------------------------------
-class TowerNormal
-	constructor : (@context, @x, @x) ->
+class TowerNormal extends Tower
+	constructor : (@canvasContext, @x, @y) ->
 		super(@canvasContext, @x, @y)
 		@radius = 10
 		@range = 60
@@ -56,8 +56,8 @@ class TowerNormal
 		@lives = 2
 
 # ----------------------------------------------
-class TowerLong
-	constructor : (@context, @x, @x) ->
+class TowerLong extends Tower
+	constructor : (@canvasContext, @x, @y) ->
 		super(@canvasContext, @x, @y)
 		@radius = 30
 		@range = 60
@@ -68,8 +68,8 @@ class TowerLong
 
 
 # ----------------------------------------------
-class TowerHeavy
-	constructor : (@context, @x, @x) ->
+class TowerHeavy extends Tower
+	constructor : (@canvasContext, @x, @y) ->
 		super(@canvasContext, @x, @y)
 		@radius = 30
 		@range = 60

@@ -4,14 +4,14 @@ class Shape
 
 # -------------------------------------------------
 class Circle extends Shape
-	constructor : (@canvasContext, @x, @y, @color, @radius) ->
+	constructor : (@canvasContext, @x, @y, @radius, @color) ->
     super(@canvasContext, @x, @y, @color)
 
 	draw: ->
-	  @canvasContext.beginPath
+	  @canvasContext.beginPath()
 	  @canvasContext.fillStyle = @color
 	  @canvasContext.arc @x, @y, @radius, 0, Math.PI * 2, true
-	  @canvasContext.fill
+	  @canvasContext.fill()
 
 # -------------------------------------------------
 class Rectangle extends Shape
