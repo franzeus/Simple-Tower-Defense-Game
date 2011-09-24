@@ -27,12 +27,19 @@ class Game
     @base = null
     @towers = []
     @enemies = []
-    @player = null
+    @player = new Player(1, 1200)
 
     @base = new Base(@_canvasContext, @WIDTH, @HEIGHT)
+
     
+    interval = window.setInterval(->
+      that.draw()
+    , 1000 / @FPS)
+    spawnInterval = window.setInterval(->
+      that.createEnemy()
+    , 4000)
     # ----------------------------
-  draw: ->
+  draw: ->    
     that = this
     @clearCanvas()
     @base.draw()

@@ -1,6 +1,5 @@
 class Player 
 	constructor : (@id, @money = 0) ->
-		@money = 0;
 		@moneyHtmlObject = $("#money");
 		@addMoney @money
 

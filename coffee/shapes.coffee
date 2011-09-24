@@ -25,9 +25,9 @@ class Rectangle extends Shape
 # -------------------------------------------------
 class ImageShape extends Shape
 	constructor : (@canvasContext, @x, @y, @width, @height, @src, @angle) ->
+    @imgObj = new Image
+    @imgObj.src = @src
     super(@canvasContext, @x, @y)
-    imgObj = new Image
-    imgObj.src = @src
 
   draw: ->
     @canvasContext.save

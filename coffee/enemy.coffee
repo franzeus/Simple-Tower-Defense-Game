@@ -7,8 +7,8 @@ class Enemy
 		@radius = 2
 		@money = 50
 
-		@enemyDamageShape = new Rectangle(_context, @startX + 2, @startY - 2, 10, 2, @color)
-		@enemyShape = new ImageShape(_context, @startX, @startY, 15, 22, "images/jet.gif", 0)
+		@enemyDamageShape = new Rectangle(@context, @startX + 2, @startY - 2, 10, 2, @color)
+		@enemyShape = new ImageShape(@context, @startX, @startY, 15, 22, "images/jet.gif", 0)
 		
 		@xChange = (@endX - @enemyShape.x) / 1000
 		@yChange = (@endY - @enemyShape.y) / 1000
