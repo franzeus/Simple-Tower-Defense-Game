@@ -40,7 +40,7 @@ Tower.prototype.init = function() {
 Tower.prototype.draw = function() {
 	if(this.lives > 0) {
 		if(this.isDisplayRange)
-			this.showRange();	
+			this.showRange();		
 		this.towerShape.draw();
 	}
 };
@@ -80,30 +80,43 @@ Tower.prototype.setDamage = function() {
 Tower.prototype.remove = function() {
 };
 
+// Move unit to x,y
+Tower.prototype.moveTo = function(_x, _y) {
+	//if(this.towerShape.x == _x && this.towerShape.y == _y)
+	//	return false;
+
+	console.log("jep");
+	do {
+		this.towerShape.x += (_x - this.towerShape.x) / 10;
+		this.towerShape.y +- (_y - this.towerShape.y) / 10;
+		setTimeout(this.moveTo, 30);
+	}
+	while(this.towerShape.x == _x && this.towerShape.y == _y);
+
+};
 
 // ------- SPECIALIZATION ---------- //
 
-TowerNormal = function(_context, _posX, _posY, _costs, _radius, _range, _lives, _color) {
+TowerNormal = function(_context, _posX, _posY) {
+
+	this.constructor = Tower(_context, _posX, _posY);
+
 	this.canvasContext = _context;
 	this.radius = 30;
 	this.x = _posX;
 	this.y = _posY;
 	
-	this.radius = _radius;
-	this.size = _radius;
-	this.range = _range;
+	this.radius = 10;	
+	this.range = 60;
 	this.shootsPerSeconds = 1;
-	this.costs = _costs;
-	this.color = '#FF2899';
-	this.lives = _lives;
+	this.costs = 100;
+	this.color = '#111111';
+	this.lives = 2;
 }
 TowerNormal.prototype = new Tower();
-TowerNormal.prototype.constructor = Tower;
 
 
 TowerLong = function() {
-
-
 
 }
 TowerLong.prototype = new Tower();

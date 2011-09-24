@@ -10,7 +10,7 @@ Base = function(_context, _canvasW, _canvasH) {
 	this.y = (_canvasH / 2) - (this.height / 2);
 		
 	this.color = "#FFD800";
-	this.lives = 15;
+	this.lives = 1;
 
 	this.baseShape = new Rectangle(_context, this.x, this.y, this.width, this.height, this.color  );
 	

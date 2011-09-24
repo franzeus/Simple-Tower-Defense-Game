@@ -1,10 +1,17 @@
-Circle = function(_context, _x, _y, _r, _color) {	
-	this.radius = _r;
+// Base Class
+Shape = function(_context, _x, _y, _color) {	
 	this.x = _x;
 	this.y = _y;
 	this.color = _color;
 	this.canvasContext = _context;
 };
+
+// -------------------------------------------------
+Circle = function(_context, _x, _y, _r, _color) {	
+	this.constructor(_context, _x, _y, _color);
+	this.radius = _r;
+};
+Circle.prototype = new Shape();
 //
 Circle.prototype.draw = function() {
 	this.canvasContext.beginPath();
@@ -14,15 +21,12 @@ Circle.prototype.draw = function() {
 };
 
 // -------------------------------------------------
-
 Rectangle = function(_context, _x, _y, _w, _h, _color) {	
-	this.x = _x;
-	this.y = _y;
+	this.constructor(_context, _x, _y, _color);
 	this.width = _w;
 	this.height = _h
-	this.color = _color;
-	this.canvasContext = _context;
 };
+Rectangle.prototype = new Shape();
 //
 Rectangle.prototype.draw = function() {
 	this.canvasContext.fillStyle = this.color;
@@ -30,18 +34,16 @@ Rectangle.prototype.draw = function() {
 };
 
 // -------------------------------------------------
-
 ImageShape = function(_context, _x, _y, _w, _h, _src, _angle) {
-	this.x = _x;
-	this.y = _y;
+	this.constructor(_context, _x, _y);
 	this.width = _w;
 	this.height = _h
 	this.src = _src;
 	this.img = new Image();
 	this.img.src = _src;
-	this.canvasContext = _context;
 	this.angle = 0;// _angle;
 };
+ImageShape.prototype = new Shape();
 //
 ImageShape.prototype.draw = function() {
 	this.canvasContext.save();

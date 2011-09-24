@@ -10,28 +10,6 @@ var Game = function() {
 	var interval = 0;
 	var spawnInterval;
 
-	this.base = null;
-	this.towers = [];
-	this.enemies = [];
-	this.player = null;
-
-	this.drawNewTower = false;										
-	this.towerTypes = [ // name, costs, radius, range, lives, shootInterval, bulletPower
-											['normal', 100, 10, 60, 2, "#111111", 1, 0.5], 
-											['long', 150, 15, 100, 1, "#00111F", 2, 0.2],
-											['heavy', 200, 20, 50, 4, "#222222", 2, 1] 
-										];
-	this.newTowerType;
-	this.m = null;
-	this.isDisplayRange = false;
-
-	this.start();
-};
-
-// Init canvas and the game
-Game.prototype.start = function() {
-	var that = this;
-
 	this.canvas = document.getElementById("canvas");
 	this.buffer = document.getElementById("buffer-canvas");
 
@@ -47,10 +25,38 @@ Game.prototype.start = function() {
 	// Events
 	$("#canvas").mousedown($.proxy(this.clickEvent, this));
 	$(".createTowerButton").click($.proxy(this.initAddTower, this));
+	$(".startGameButton").click($.proxy(this.start, this));
 	$(document).keydown($.proxy(this.keyEvents, this));
+
+
+
+	this.drawNewTower = false;										
+	this.towerTypes = [ // name, costs, radius, range, lives, shootInterval, bulletPower
+											['normal', 100, 10, 60, 2, "#111111", 1, 0.5], 
+											['long', 150, 15, 100, 1, "#00111F", 2, 0.2],
+											['heavy', 200, 20, 50, 4, "#222222", 2, 1] 
+										];
+	this.newTowerType;
+	this.m = null;
+
+	this.activeUnit = null;
+
+	this.start();
+};
+
+// Init canvas and the game
+Game.prototype.start = function() {
+	var that = this;
+
+	this.base = null;
+	this.towers = [];
+	this.enemies = [];
+	this.player = null;
 
 	this.base = new Base(this._canvasContext, this.WIDTH, this.HEIGHT);
 	this.player = new Player(1, 1250);
+
+	this.isDisplayRange = false;
 
 	interval 			= window.setInterval(function() { that.draw() }, 1000 / this.FPS);
 	spawnInterval = window.setInterval(function() { that.createEnemy() }, 4000);
@@ -106,11 +112,11 @@ Game.prototype.clearCanvas = function() {
 
 // Stop Game
 Game.prototype.stop = function() {
-    clearInterval(this.interval);    
-    this.interval = 0;
+    clearInterval(interval);
+    interval = 0;
 };
 
-//
+// Check object collision
 Game.prototype.checkCollision = function() {
 	var base 		= this.base;
 	var towers 	= this.towers;
@@ -166,14 +172,26 @@ Game.prototype.clickEvent = function(e) {
 	var x = this.getMousePosition(e)[0];
 	var y = this.getMousePosition(e)[1];
 	
+	/*
+	console.log(this.activeUnit);
+	if(this.activeUnit != null) {
+		this.activeUnit.moveTo(x, y);
+		this.activeUnit = null;
+	}
+
+	var activeUnit = null;
+	*/
 	// Check onClick Towers
 	this.towers.forEach(function(tower) {
 		if(	x >= tower.collisionShape.x && 
 				x <= (tower.collisionShape.x + tower.collisionShape.width) && 
 				y >= tower.collisionShape.y &&
-				y <= tower.collisionShape.y + tower.collisionShape.height)
+				y <= tower.collisionShape.y + tower.collisionShape.height) {
 			tower.clickEvent();
+			//activeUnit = tower;
+		}
 	});
+	//this.activeUnit = activeUnit;
 
 		// Check onClick Towers
 	this.enemies.forEach(function(enemy) {
