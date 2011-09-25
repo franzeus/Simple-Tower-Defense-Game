@@ -79,27 +79,32 @@ class Game
     towers = @towers
     that = this
     player = @player
-    @enemies.forEach (enemy) ->       
+    
+    @enemies.forEach (enemy) ->
+     
       if enemy.isVisible
+        
         if that.isColliding(enemy.enemyShape, base)
+          
           enemy.remove()
           base.setDamage()
-                  
+                            
         towers.forEach (tower) ->
-          if tower.lives > 0
-        
+          
+          if tower.lives > 0        
             tower.bullets.forEach (bullet) ->
-              if bullet.isVisible
-        
+              
+              if bullet.isVisible                  
                 if that.isColliding(bullet.bulletCollisionShape, enemy.enemyShape)
                   enemy.decreaseLive tower.bulletPower
                   player.addMoney enemy.money  if enemy.lives <= 0
-                  bullet.remove()
+                  bullet.remove()              
+                
+            if that.isColliding(enemy.enemyShape, tower.collisionShape)
+              enemy.remove()
+              tower.setDamage()
               
-                if that.isColliding(enemy.enemyShape, tower.collisionShape)
-                  enemy.remove()
-                  tower.setDamage()
-                  tower.shoot enemy.enemyShape.x, enemy.enemyShape.y if that.isColliding(enemy.enemyShape, tower.rangeCollisionShape)
+            tower.shoot enemy.enemyShape.x, enemy.enemyShape.y if that.isColliding(enemy.enemyShape, tower.rangeCollisionShape)
 
     # ----------------------------
   clickEvent: (e) ->
@@ -160,7 +165,7 @@ class Game
 
     if @newTowerType == "long"
       newTowerObj = new TowerLong(@_canvasContext, @getMousePosition(e)[0], @getMousePosition(e)[1])
-    if @newTowerType == "heavy"
+    else if @newTowerType == "heavy"
       newTowerObj = new TowerHeavy(@_canvasContext, @getMousePosition(e)[0], @getMousePosition(e)[1])
     else
       newTowerObj = new TowerNormal(@_canvasContext, @getMousePosition(e)[0], @getMousePosition(e)[1])
