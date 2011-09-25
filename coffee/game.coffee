@@ -1,7 +1,6 @@
 class Game
   constructor: ->
     @FPS = 50
-    interval = 0
     @canvas = document.getElementById("canvas")
     @buffer = document.getElementById("buffer-canvas")
     @buffer.width = @canvas.width
@@ -14,10 +13,9 @@ class Game
     $(".createTowerButton").click $.proxy(@initAddTower, this)
     $(".startGameButton").click $.proxy(@start, this)
     $(document).keydown $.proxy(@keyEvents, this)
-    @drawNewTower = false
-    @towerTypes = [ [ "normal", 100, 10, 60, 2, "#111111", 1, 0.5 ], [ "long", 150, 15, 100, 1, "#00111F", 2, 0.2 ], [ "heavy", 200, 20, 50, 4, "#222222", 2, 1 ] ]
+    @drawNewTower = false    
     @newTowerType
-    @m = null
+    @towerShapeTemplate = null
     @activeUnit = null
     @start()
 
@@ -30,12 +28,11 @@ class Game
     @player = new Player(1, 1200)
 
     @base = new Base(@_canvasContext, @WIDTH, @HEIGHT)
-
     
-    interval = window.setInterval(->
+    @interval = window.setInterval(->
       that.draw()
     , 1000 / @FPS)
-    spawnInterval = window.setInterval(->
+    @spawnInterval = window.setInterval(->
       that.createEnemy()
     , 4000)
     # ----------------------------
@@ -54,14 +51,14 @@ class Game
     
     @update()
       
-    @m.draw() if @drawNewTower
+    @towerShapeTemplate.draw() if @drawNewTower
       
     @context.drawImage @buffer, 0, 0
     
   # ----------------------------
-  update: ->
-    @checkCollision()
+  update: ->    
     @stop() if @base.lives <= 0
+    @checkCollision()    
     
   # ----------------------------
   clearCanvas: ->
@@ -70,8 +67,9 @@ class Game
     
   # ----------------------------
   stop: ->
-    clearInterval interval
-    interval = 0
+    clearInterval @interval
+    clearInterval @spawnInterval
+    @interval = 0
 
   # ----------------------------
   checkCollision: ->
@@ -148,15 +146,15 @@ class Game
     @newTowerType = e.currentTarget.id
     @drawNewTower = true
 
-    @m = new Circle(@_canvasContext, e.pageX, e.pageY, 25, "rgba(17, 17, 17, 0.8)")
+    @towerShapeTemplate = new Circle(@_canvasContext, e.pageX, e.pageY, 25, "rgba(17, 17, 17, 0.8)")
     $("#canvas").mousemove $.proxy(@bindTowerToMouse, this)
     $("#canvas").mousedown $.proxy(@createTower, this)
   
   # ----------------------------
   bindTowerToMouse: (e) ->
     if @drawNewTower
-      @m.x = @getMousePosition(e)[0]
-      @m.y = @getMousePosition(e)[1]
+      @towerShapeTemplate.x = @getMousePosition(e)[0]
+      @towerShapeTemplate.y = @getMousePosition(e)[1]
   
   # ----------------------------
   createTower: (e) ->

@@ -67,7 +67,7 @@ class TowerLong extends Tower
     @range = 110
     @shootsPerSeconds = 1
     @costs = 150
-    @color = "#1111FF"
+    @color = "#111122"
     @lives = 1
     @bulletPower = 0.2
     super(@canvasContext, @x, @y, @radius, @range, @color, @lives, @shootsPerSeconds, @bulletPower)
@@ -76,11 +76,11 @@ class TowerLong extends Tower
 # ----------------------------------------------
 class TowerHeavy extends Tower
   constructor : (@canvasContext, @x, @y) ->
-    @radius = 30
-    @range = 50
+    @radius = 25
+    @range = 60
     @shootsPerSeconds = 2
-    @costs = 200
-    @color = "#111111"
+    @costs = 250
+    @color = "#222222"
     @lives = 4
     @bulletPower = 1
     super(@canvasContext, @x, @y, @radius, @range, @color, @lives, @shootsPerSeconds, @bulletPower)

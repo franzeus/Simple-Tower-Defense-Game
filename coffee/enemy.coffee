@@ -23,7 +23,6 @@ class Enemy
       @enemyDamageShape.draw()  if @lives < 1
 
   decreaseLive: (_amount) ->
-    console.log _amount
     if @lives - _amount <= 0
       @remove()
       return false
