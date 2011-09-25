@@ -145,6 +145,8 @@ class Game
   # ----------------------------
   createEnemy: ->
     plusMinus = @getRandomNumber(0, 3)
+
+    # Random Enemy start position
     if plusMinus == 0
       randomX = @getRandomNumber(0, @WIDTH) - @WIDTH
       randomY = @getRandomNumber(0, @HEIGHT) - @HEIGHT
@@ -158,7 +160,18 @@ class Game
       randomX = @getRandomNumber(0, @WIDTH) + @WIDTH
       randomY = @getRandomNumber(0, @HEIGHT) + @HEIGHT
     
-    @enemies.push new Enemy(@_canvasContext, randomX, randomY, @base.x + (@base.width / 2), @base.y + (@base.height / 2))
+    # Random Enemy type
+    switch plusMinus
+      when (0)
+        newEnemyObject = new Helicopter(@_canvasContext, randomX, randomY, @base.x + (@base.width / 2), @base.y + (@base.height / 2))
+      when (1)
+        newEnemyObject = new StealthJet(@_canvasContext, randomX, randomY, @base.x + (@base.width / 2), @base.y + (@base.height / 2))
+      when (2)
+        newEnemyObject = new Jet(@_canvasContext, randomX, randomY, @base.x + (@base.width / 2), @base.y + (@base.height / 2))
+      else
+       newEnemyObject = new Jet(@_canvasContext, randomX, randomY, @base.x + (@base.width / 2), @base.y + (@base.height / 2))
+
+    @enemies.push newEnemyObject
     
   # ----------------------------
   initAddTower: (e) ->
