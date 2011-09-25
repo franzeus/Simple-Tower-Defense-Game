@@ -1,5 +1,5 @@
-class Bullet 
- constructor: (@canvasContext, @posXstart, @posYstart, @posXend, @posYend) ->     
+class Bullet
+ constructor: (@canvasContext, @posXstart, @posYstart, @posXend, @posYend) ->
     @radius = 2
     @color = "#111111"
     @isVisible = true

@@ -6,8 +6,10 @@ class Tower
     @rangeColor = "rgba(255, 214, 229, 0.5)"
     @shootInterval = 0
     @bullets = []
+
     @towerShape = new Circle(@canvasContext, @x, @y, @radius, @color)
     @rangeShape = new Circle(@canvasContext, @x, @y, @range, @rangeColor)
+    
     @collisionShape = new Rectangle(@canvasContext, @x - (@radius), @y - (@radius), @radius * 2, @radius * 2, @rangeColor)
     @rangeCollisionShape = new Rectangle(@canvasContext, @x - (@range), @y - (@range), @range * 2, @range * 2, @rangeColor)
     
@@ -21,6 +23,7 @@ class Tower
     if isAllowedToShoot
       @bullets.push new Bullet(@canvasContext, @x, @y, _enemyPosX, _enemyPosY)
       isAllowedToShoot = false
+      
       @shootInterval = setTimeout(->
         that.releaseShoot()
       , 1000 / @shootsPerSeconds)
@@ -37,13 +40,13 @@ class Tower
   showRange: ->
     @rangeShape.draw()
 
-  setDamage: ->
-    @lives--  
+  setDamage: ->    
+    @lives-- if @lives >= 0
 
   moveTo: (_x, _y) ->
     loop
       @towerShape.x += (_x - @towerShape.x) / 10
-      @towerShape.y + -(_y - @towerShape.y) / 10
+      @towerShape.y += (_y - @towerShape.y) / 10
       setTimeout @moveTo, 30
       break unless @towerShape.x == _x and @towerShape.y == _y
 

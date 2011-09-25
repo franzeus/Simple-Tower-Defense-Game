@@ -34,3 +34,26 @@ class ImageShape extends Shape
     @canvasContext.rotate @angle * Math.PI  / 180
     @canvasContext.drawImage @imgObj, @x, @y, @width, @height
     @canvasContext.restore
+
+# -------------------------------------------------
+class ImageSprite extends Shape
+  constructor : (@canvasContext, @x, @y, @width, @height, @src, @frames) ->
+    @imgObj = new Image
+    @imgObj.src = @src
+    @actualFrame = 0
+    @interval = 0
+    super(@canvasContext, @x, @y)
+
+  draw: ->
+    if @interval == @frames - 1
+      if @actualFrame == @frames
+        @actualFrame = 0
+      else  
+        @actualFrame++;
+      @interval = 0;
+      
+    @interval++;
+    try
+      @canvasContext.drawImage @imgObj, @width * @actualFrame ,0 ,@width, @height, @x, @y, @width, @height);
+    catch error
+      print error    
