@@ -64,3 +64,6 @@ class StealthJet extends Enemy
     @damage = 0.5
     @imgSrc = "images/stealthjet.png"
     super(@context, @startX, @startY, @endX, @endY, @speed, @color, @lives, @money, @imgSrc)
+  
+  toggleVisibility: ->
+    @isHidden not @isHidden
