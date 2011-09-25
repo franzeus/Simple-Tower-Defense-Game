@@ -1,32 +1,42 @@
+# A Simple Tower Defense Game
+# made by weberdevelopment.de
+# 09.2011
 class Game
   constructor: ->
     @FPS = 50
+
     @canvas = document.getElementById("canvas")
     @buffer = document.getElementById("buffer-canvas")
     @buffer.width = @canvas.width
     @buffer.height = @canvas.height
     @context = @canvas.getContext("2d")
     @_canvasContext = @buffer.getContext("2d")
+    
     @HEIGHT = @canvas.height
     @WIDTH = @canvas.width
+    
+    # Events
     $("#canvas").mousedown $.proxy(@clickEvent, this)
     $(".createTowerButton").click $.proxy(@initAddTower, this)
     $(".startGameButton").click $.proxy(@start, this)
     $(document).keydown $.proxy(@keyEvents, this)
+    
     @drawNewTower = false    
     @newTowerType
     @towerShapeTemplate = null
     @activeUnit = null
+    
     @start()
 
-   # ----------------------------
+  # ----------------------------
+  # Init
   start: ->
     that = this
     @base = null
     @towers = []
     @enemies = []
-    @player = new Player(1, 1200)
 
+    @player = new Player(1, 1200)
     @base = new Base(@_canvasContext, @WIDTH, @HEIGHT)
     
     @interval = window.setInterval(->
@@ -35,17 +45,21 @@ class Game
     @spawnInterval = window.setInterval(->
       that.createEnemy()
     , 4000)
-    # ----------------------------
-  draw: ->    
+  # ----------------------------
+  # Draw objects
+  draw: ->
     that = this
     @clearCanvas()
+    
     @base.draw()
+
     @towers.forEach (tower) ->
       if tower.lives > 0
         tower.draw()
+        # Check if bullet hits enemy
         tower.bullets.forEach (bullet) ->
           bullet.draw() if that.isColliding(bullet.bulletCollisionShape, tower.rangeCollisionShape) and bullet.isVisible
-
+    
     @enemies.forEach (enemy) ->      
       enemy.draw()
     
@@ -56,7 +70,7 @@ class Game
     @context.drawImage @buffer, 0, 0
     
   # ----------------------------
-  update: ->    
+  update: ->
     @stop() if @base.lives <= 0
     @checkCollision()    
     
@@ -78,44 +92,51 @@ class Game
     that = this
     player = @player
     
+    # Enemey collision detection
     @enemies.forEach (enemy) ->
      
-      if enemy.isVisible
-        
-        if that.isColliding(enemy.enemyShape, base)
-          
+      if enemy.isVisible        
+        # Base
+        if that.isColliding(enemy.enemyShape, base)          
           enemy.remove()
           base.setDamage()
-                            
+        
+        # Tower
         towers.forEach (tower) ->
-          
-          if tower.lives > 0        
+          if tower.lives > 0
+            # Enemy collides tower.bullet   
             tower.bullets.forEach (bullet) ->
-              
-              if bullet.isVisible                  
+              if bullet.isVisible      
                 if that.isColliding(bullet.bulletCollisionShape, enemy.enemyShape)
                   enemy.decreaseLive tower.bulletPower
                   player.addMoney enemy.money  if enemy.lives <= 0
-                  bullet.remove()              
-                
+                  bullet.remove()
+
+            # Enemy collides with tower
             if that.isColliding(enemy.enemyShape, tower.collisionShape)
               enemy.remove()
               tower.setDamage()
-              
-            tower.shoot enemy.enemyShape.x, enemy.enemyShape.y if that.isColliding(enemy.enemyShape, tower.rangeCollisionShape)
+            
+            # Enemy within tower.range  
+            if that.isColliding(enemy.enemyShape, tower.rangeCollisionShape)
+              tower.shoot enemy.enemyShape.x, enemy.enemyShape.y 
 
-    # ----------------------------
+  # ----------------------------
+  # Handle cancas click events
   clickEvent: (e) ->
     x = @getMousePosition(e)[0]
     y = @getMousePosition(e)[1]
     
+    # Check if tower was clicked
     @towers.forEach (tower) ->
       tower.clickEvent()  if x >= tower.collisionShape.x and x <= (tower.collisionShape.x + tower.collisionShape.width) and y >= tower.collisionShape.y and y <= tower.collisionShape.y + tower.collisionShape.height
 
+    # Check if enemy was clicked
     @enemies.forEach (enemy) ->
       enemy.clickEvent()  if x >= enemy.enemyShape.x and x <= (enemy.enemyShape.x + enemy.enemyShape.width) and y >= enemy.enemyShape.y and y <= enemy.enemyShape.y + enemy.enemyShape.height
   
   # ----------------------------
+  # Handle KeyEvents
   keyEvents: (e) ->
     switch e.keyCode
       when (82)
@@ -177,6 +198,7 @@ class Game
     $("#canvas").unbind "mousedown", @createTower
   
   # ----------------------------
+  # Show or hide all tower ranges
   toggleTowerRanges: ->
     show = not @isDisplayRange
     @towers.forEach (tower) ->
@@ -184,6 +206,8 @@ class Game
 
     @isDisplayRange = not @isDisplayRange
 
+  # ----------------------------
+  # HELPERS
   # ----------------------------
   getRandomNumber: (min, max) ->
     return (-1)  if min > max
@@ -204,6 +228,7 @@ class Game
     return [ x, y ]
   
   # ----------------------------
+  # Return true if obj1 is within obj2
   isColliding: (obj1, obj2) ->
     return true  if obj1.x > obj2.x and obj1.x < (obj2.x + obj2.width) and obj1.y > obj2.y and obj1.y < (obj2.y + obj2.height)
     false
