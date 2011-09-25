@@ -51,7 +51,7 @@ class Tower
 # ----------------------------------------------
 class TowerNormal extends Tower
   constructor : (@canvasContext, @x, @y) ->   
-    @radius = 10
+    @radius = 5
     @range = 70
     @shootsPerSeconds = 1
     @costs = 100
@@ -63,7 +63,7 @@ class TowerNormal extends Tower
 # ----------------------------------------------
 class TowerLong extends Tower
   constructor : (@canvasContext, @x, @y) ->
-    @radius = 15
+    @radius = 10
     @range = 110
     @shootsPerSeconds = 1
     @costs = 150
@@ -76,7 +76,7 @@ class TowerLong extends Tower
 # ----------------------------------------------
 class TowerHeavy extends Tower
   constructor : (@canvasContext, @x, @y) ->
-    @radius = 25
+    @radius = 20
     @range = 60
     @shootsPerSeconds = 2
     @costs = 250

@@ -69,7 +69,7 @@ class Game
   stop: ->
     clearInterval @interval
     clearInterval @spawnInterval
-    @interval = 0
+    @interval = 0    
 
   # ----------------------------
   checkCollision: ->
@@ -146,7 +146,7 @@ class Game
     @newTowerType = e.currentTarget.id
     @drawNewTower = true
 
-    @towerShapeTemplate = new Circle(@_canvasContext, e.pageX, e.pageY, 25, "rgba(17, 17, 17, 0.8)")
+    @towerShapeTemplate = new Circle(@_canvasContext, e.pageX, e.pageY, 15, "rgba(17, 17, 17, 0.8)")
     $("#canvas").mousemove $.proxy(@bindTowerToMouse, this)
     $("#canvas").mousedown $.proxy(@createTower, this)
   
