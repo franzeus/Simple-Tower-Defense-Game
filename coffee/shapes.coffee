@@ -1,17 +1,17 @@
 # Base Class
 class Shape 
-	constructor: (@canvasContext, @x, @y, @color) ->
+  constructor: (@canvasContext, @x, @y, @color) ->
 
 # -------------------------------------------------
 class Circle extends Shape
-	constructor : (@canvasContext, @x, @y, @radius, @color) ->
+  constructor : (@canvasContext, @x, @y, @radius, @color) ->
     super(@canvasContext, @x, @y, @color)
 
-	draw: ->
-	  @canvasContext.beginPath()
-	  @canvasContext.fillStyle = @color
-	  @canvasContext.arc @x, @y, @radius, 0, Math.PI * 2, true
-	  @canvasContext.fill()
+  draw: ->
+    @canvasContext.beginPath()
+    @canvasContext.fillStyle = @color
+    @canvasContext.arc @x, @y, @radius, 0, Math.PI * 2, true
+    @canvasContext.fill()
 
 # -------------------------------------------------
 class Rectangle extends Shape
@@ -24,7 +24,7 @@ class Rectangle extends Shape
 
 # -------------------------------------------------
 class ImageShape extends Shape
-	constructor : (@canvasContext, @x, @y, @width, @height, @src, @angle) ->
+  constructor : (@canvasContext, @x, @y, @width, @height, @src, @angle) ->
     @imgObj = new Image
     @imgObj.src = @src
     super(@canvasContext, @x, @y)
